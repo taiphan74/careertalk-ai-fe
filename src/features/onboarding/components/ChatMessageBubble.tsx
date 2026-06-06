@@ -1,6 +1,6 @@
 "use client";
 
-import { MessagePrimitive } from "@assistant-ui/react";
+import { MessagePrimitive, useMessage } from "@assistant-ui/react";
 import type { BilingualContent } from "../types";
 
 /**
@@ -135,6 +135,14 @@ function AIAvatar() {
  */
 export function AssistantMessageBubble() {
   injectStyles();
+  const message = useMessage();
+  // Guard: nếu content rỗng (assistant-ui placeholder khi isRunning) → không render
+  const text = message.content
+    .filter((c): c is { type: "text"; text: string } => c.type === "text")
+    .map((c) => c.text)
+    .join("")
+    .trim();
+  if (!text) return null;
   return (
     <div className="flex items-end gap-2 bubble-anim">
       <AIAvatar />
@@ -148,6 +156,48 @@ export function AssistantMessageBubble() {
         }}
       >
         <BilingualAssistantContent />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Bubble hiển thị khi AI đang xử lý response.
+ * Cùng layout với AssistantMessageBubble: avatar trái + glassmorphism bubble.
+ * Animation: 3 dot wave bounce với Ocean Blue gradient glow.
+ */
+export function TypingIndicatorBubble() {
+  injectStyles();
+  return (
+    <div className="flex items-end gap-2 bubble-anim">
+      <AIAvatar />
+      <div
+        className="rounded-2xl rounded-bl-sm px-4 py-3"
+        style={{
+          background: "rgba(240,249,255,0.85)",
+          backdropFilter: "blur(12px)",
+          border: "1px solid rgba(191,219,254,0.6)",
+          boxShadow: "0 2px 12px rgba(37,99,235,0.08), 0 1px 3px rgba(0,0,0,0.05)",
+          minWidth: "64px",
+        }}
+      >
+        <div className="flex items-center gap-1.5 py-0.5">
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              style={{
+                display: "inline-block",
+                width: "7px",
+                height: "7px",
+                borderRadius: "50%",
+                background: `linear-gradient(135deg, #2563EB 0%, #0891B2 100%)`,
+                boxShadow: "0 0 6px rgba(37,99,235,0.5)",
+                animation: `typingBounce 1.1s ease-in-out infinite`,
+                animationDelay: `${i * 0.18}s`,
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

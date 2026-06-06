@@ -6,7 +6,7 @@ import {
 } from "@assistant-ui/react";
 import { useOnboardingFlow } from "../hooks/useOnboardingFlow";
 import { useOnboardingRuntime } from "../hooks/useOnboardingRuntime";
-import { UserMessageBubble, AssistantMessageBubble } from "./ChatMessageBubble";
+import { UserMessageBubble, AssistantMessageBubble, TypingIndicatorBubble } from "./ChatMessageBubble";
 import { ChatComposer } from "./ChatComposer";
 
 /**
@@ -48,6 +48,10 @@ export function OnboardingChat() {
                 AssistantMessage: AssistantMessageBubble,
               }}
             />
+            {/* Hiển thị typing indicator khi AI đang xử lý */}
+            <ThreadPrimitive.If running>
+              <TypingIndicatorBubble />
+            </ThreadPrimitive.If>
           </ThreadPrimitive.Viewport>
 
           {/* Input cố định ở đáy */}
