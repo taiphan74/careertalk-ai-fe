@@ -13,19 +13,14 @@ import { ChatComposer } from "./ChatComposer";
  * Component chính của feature onboarding.
  * Kết hợp tất cả hooks và sub-components thành chat UI hoàn chỉnh.
  *
- * Cấu trúc provider:
+ * Background: mesh gradient ocean tinh tế, không át nội dung chat.
+ * Provider chain:
  * 1. AssistantRuntimeProvider: broadcast runtime qua React Context
- *    → hooks như useThread(), useComposer() đọc từ đây
- * 2. ThreadPrimitive.Root: thiết lập thread scope cho primitives con
- *
- * Note: AuiProvider bị loại bỏ vì v0.14.x yêu cầu AssistantClient instance
- * mà ta không có trong context standalone này. Theme sẽ fallback default.
+ * 2. ThreadPrimitive.Root: thread scope cho primitives con
  */
 export function OnboardingChat() {
-  // Lấy business logic từ flow hook (framework-agnostic)
   const { messages, isRunning, handleSend } = useOnboardingFlow();
 
-  // Adapter: chuyển đổi flow data → assistant-ui runtime format
   const runtime = useOnboardingRuntime({
     messages,
     isRunning,
@@ -34,19 +29,31 @@ export function OnboardingChat() {
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
-      <ThreadPrimitive.Root className="flex flex-col h-full">
-        {/* Vùng scroll chứa danh sách tin nhắn */}
-        <ThreadPrimitive.Viewport className="flex-1 overflow-y-auto p-4 space-y-4">
-          <ThreadPrimitive.Messages
-            components={{
-              UserMessage: UserMessageBubble,
-              AssistantMessage: AssistantMessageBubble,
-            }}
-          />
-        </ThreadPrimitive.Viewport>
-        {/* Input cố định ở đáy, không cuộn theo messages */}
-        <ChatComposer />
-      </ThreadPrimitive.Root>
+      <div
+        className="flex flex-col h-full relative"
+        style={{
+          background: `
+            radial-gradient(ellipse 80% 60% at 20% 0%, rgba(37,99,235,0.07) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 50% at 80% 100%, rgba(6,182,212,0.06) 0%, transparent 60%),
+            var(--background)
+          `,
+        }}
+      >
+        <ThreadPrimitive.Root className="flex flex-col h-full">
+          {/* Vùng scroll chứa danh sách tin nhắn */}
+          <ThreadPrimitive.Viewport className="flex-1 overflow-y-auto px-4 py-5 space-y-3">
+            <ThreadPrimitive.Messages
+              components={{
+                UserMessage: UserMessageBubble,
+                AssistantMessage: AssistantMessageBubble,
+              }}
+            />
+          </ThreadPrimitive.Viewport>
+
+          {/* Input cố định ở đáy */}
+          <ChatComposer />
+        </ThreadPrimitive.Root>
+      </div>
     </AssistantRuntimeProvider>
   );
 }

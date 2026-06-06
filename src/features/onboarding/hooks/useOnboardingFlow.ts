@@ -98,7 +98,7 @@ export function useOnboardingFlow() {
    */
   const handleCompletion = useCallback(async (currentMessages: ChatMessage[]) => {
     const finalProfile = { ...profileRef.current, completedAt: new Date().toISOString() };
-    saveProfile(finalProfile);
+    saveProfile(finalProfile as UserProfile);
     completedRef.current = true;
     toast.success("🎉 Thu thập thông tin thành công! Chào mừng bạn đến với CareerTalk AI.");
 
@@ -143,7 +143,7 @@ export function useOnboardingFlow() {
     if (!currentStep) return;
 
     // Lưu field tương ứng bước hiện tại
-    profileRef.current[currentStep.field as keyof UserProfile] = content;
+    profileRef.current[currentStep.key as keyof UserProfile] = content;
 
     // Tính bước tiếp theo
     const nextStep = stepRef.current + 1;
@@ -234,7 +234,7 @@ export function useOnboardingFlow() {
       setMessages((prev) => [...prev, userMsg]);
 
       if (currentStep) {
-        profileRef.current[currentStep.field as keyof UserProfile] = content;
+        profileRef.current[currentStep.key as keyof UserProfile] = content;
       }
       // Truyền snapshot fresh thay vì dùng stale closure
       await handleCompletion([...messagesRef.current, userMsg]);
