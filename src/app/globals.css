@@ -1,26 +1,268 @@
 @import "tailwindcss";
 
+/* ============================================================
+   CAREERTALK AI — GLOBAL CSS
+   Theme: Ocean Focus (Blue + Teal)
+   Tailwind v4 — all config lives here, no tailwind.config.ts
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. DESIGN TOKENS — Light Mode
+   ------------------------------------------------------------ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* --- Brand colors --- */
+  --primary:         #2563EB;
+  --primary-hover:   #1D4ED8;
+  --primary-light:   #EFF6FF;
+  --primary-text:    #1E40AF;
+
+  --accent:          #06B6D4;
+  --accent-hover:    #0891B2;
+  --accent-light:    #ECFEFF;
+  --accent-text:     #155E75;
+
+  --success:         #14B8A6;
+  --success-hover:   #0F9688;
+  --success-light:   #F0FDFA;
+  --success-text:    #134E4A;
+
+  --warning:         #F59E0B;
+  --warning-light:   #FFFBEB;
+  --warning-text:    #92400E;
+
+  --danger:          #EF4444;
+  --danger-light:    #FEF2F2;
+  --danger-text:     #991B1B;
+
+  /* --- Neutral / Surface --- */
+  --background:      #FFFFFF;
+  --surface:         #F0F9FF;
+  --surface-2:       #E0F2FE;
+  --border:          #BFDBFE;
+  --border-strong:   #93C5FD;
+
+  /* --- Text --- */
+  --foreground:      #0F172A;
+  --text-secondary:  #475569;
+  --text-tertiary:   #94A3B8;
+  --text-on-primary: #FFFFFF;
+
+  /* --- Radius --- */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
+
+  /* --- Shadow --- */
+  --shadow-sm: 0 1px 3px 0 rgb(37 99 235 / 0.08), 0 1px 2px -1px rgb(37 99 235 / 0.06);
+  --shadow-md: 0 4px 12px 0 rgb(37 99 235 / 0.10), 0 2px 4px -2px rgb(37 99 235 / 0.06);
+  --shadow-lg: 0 8px 24px 0 rgb(37 99 235 / 0.12), 0 4px 8px -4px rgb(37 99 235 / 0.08);
+
+  /* --- Typography --- */
+  --font-sans: var(--font-geist-sans), 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* ------------------------------------------------------------
+   2. DESIGN TOKENS — Dark Mode
+   ------------------------------------------------------------ */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --primary:         #3B82F6;
+    --primary-hover:   #60A5FA;
+    --primary-light:   #1E3A5F;
+    --primary-text:    #93C5FD;
+
+    --accent:          #22D3EE;
+    --accent-hover:    #67E8F9;
+    --accent-light:    #0C3A47;
+    --accent-text:     #A5F3FC;
+
+    --success:         #2DD4BF;
+    --success-hover:   #5EEAD4;
+    --success-light:   #0D3330;
+    --success-text:    #99F6E4;
+
+    --warning:         #FBBF24;
+    --warning-light:   #3D2A00;
+    --warning-text:    #FDE68A;
+
+    --danger:          #F87171;
+    --danger-light:    #3B0A0A;
+    --danger-text:     #FECACA;
+
+    --background:      #0A0F1E;
+    --surface:         #111827;
+    --surface-2:       #1E2A3B;
+    --border:          #1E3A5F;
+    --border-strong:   #2563EB;
+
+    --foreground:      #F1F5F9;
+    --text-secondary:  #94A3B8;
+    --text-tertiary:   #475569;
+    --text-on-primary: #FFFFFF;
+
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.30);
+    --shadow-md: 0 4px 12px 0 rgb(0 0 0 / 0.40);
+    --shadow-lg: 0 8px 24px 0 rgb(0 0 0 / 0.50);
   }
 }
 
+/* ------------------------------------------------------------
+   3. TAILWIND v4 — @theme
+   ------------------------------------------------------------ */
+@theme inline {
+  --color-background:    var(--background);
+  --color-foreground:    var(--foreground);
+  --color-surface:       var(--surface);
+  --color-surface-2:     var(--surface-2);
+  --color-border:        var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-primary:         var(--primary);
+  --color-primary-hover:   var(--primary-hover);
+  --color-primary-light:   var(--primary-light);
+  --color-primary-text:    var(--primary-text);
+
+  --color-accent:          var(--accent);
+  --color-accent-hover:    var(--accent-hover);
+  --color-accent-light:    var(--accent-light);
+  --color-accent-text:     var(--accent-text);
+
+  --color-success:         var(--success);
+  --color-success-light:   var(--success-light);
+  --color-success-text:    var(--success-text);
+
+  --color-warning:         var(--warning);
+  --color-warning-light:   var(--warning-light);
+  --color-warning-text:    var(--warning-text);
+
+  --color-danger:          var(--danger);
+  --color-danger-light:    var(--danger-light);
+  --color-danger-text:     var(--danger-text);
+
+  --color-text-secondary:  var(--text-secondary);
+  --color-text-tertiary:   var(--text-tertiary);
+  --color-text-on-primary: var(--text-on-primary);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  --radius-sm:   var(--radius-sm);
+  --radius-md:   var(--radius-md);
+  --radius-lg:   var(--radius-lg);
+  --radius-xl:   var(--radius-xl);
+  --radius-full: var(--radius-full);
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+}
+
+/* ------------------------------------------------------------
+   4. BASE STYLES
+   ------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ------------------------------------------------------------
+   5. TYPOGRAPHY
+   ------------------------------------------------------------ */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--foreground);
+}
+
+h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+h2 { font-size: clamp(1.375rem, 3vw, 1.875rem); }
+h3 { font-size: clamp(1.125rem, 2vw, 1.375rem); }
+h4 { font-size: 1.125rem; }
+h5 { font-size: 1rem; }
+h6 { font-size: 0.875rem; }
+
+p {
+  color: var(--foreground);
+  line-height: 1.7;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+strong, b {
+  font-weight: 600;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--surface-2);
+  color: var(--accent-text);
+  padding: 0.125em 0.375em;
+  border-radius: var(--radius-sm);
+}
+
+/* ------------------------------------------------------------
+   6. FOCUS / ACCESSIBILITY
+   ------------------------------------------------------------ */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ------------------------------------------------------------
+   7. SCROLLBAR (Webkit)
+   ------------------------------------------------------------ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* ------------------------------------------------------------
+   8. SELECTION
+   ------------------------------------------------------------ */
+::selection {
+  background: var(--primary);
+  color: var(--text-on-primary);
 }
