@@ -1,24 +1,24 @@
 import { OnboardingChat } from "@/features/onboarding/components/OnboardingChat";
 
 /**
- * Trang onboarding - thin wrapper, chỉ render feature component.
- * Header nâng cấp: gradient ocean, logo SVG sóng, progress dots.
+ * Trang onboarding — Creative style: Bangers heading, playful layout.
+ * Giữ nguyên màu Ocean Focus.
  */
 export default function OnboardingPage() {
   return (
     <main className="h-screen w-full flex flex-col overflow-hidden">
-      {/* Header gradient Ocean Focus */}
+      {/* Header */}
       <header
         className="flex-none px-5 py-4 flex items-center gap-3"
         style={{
-          background: "linear-gradient(135deg, #1E40AF 0%, #2563EB 50%, #0891B2 100%)",
-          boxShadow: "0 2px 16px 0 rgb(37 99 235 / 0.25)",
+          background: "linear-gradient(135deg, #60A5FA 0%, #93C5FD 50%, #67E8F9 100%)",
+          boxShadow: "0 2px 16px 0 rgb(96 165 250 / 0.25)",
         }}
       >
-        {/* Logo SVG sóng biển */}
+        {/* Logo */}
         <div
           className="flex-none w-10 h-10 rounded-2xl flex items-center justify-center"
-          style={{ background: "rgba(255,255,255,0.18)", backdropFilter: "blur(8px)" }}
+          style={{ background: "rgba(255,255,255,0.25)", backdropFilter: "blur(8px)" }}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path
@@ -33,20 +33,28 @@ export default function OnboardingPage() {
           </svg>
         </div>
 
-        {/* Title + subtitle */}
+        {/* Title — Bangers font */}
         <div className="flex-1 min-w-0">
-          <h1 className="text-base font-semibold text-white leading-tight tracking-tight">
+          <h1
+            className="text-white leading-none tracking-widest uppercase"
+            style={{
+              fontFamily: "var(--font-bangers)",
+              fontSize: "clamp(1.4rem, 5vw, 2rem)",
+              textShadow: "0 2px 8px rgba(0,0,0,0.12)",
+              letterSpacing: "0.08em",
+            }}
+          >
             CareerTalk AI Coach
           </h1>
-          <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.72)" }}>
+          <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.82)" }}>
             Học tiếng Anh theo cách của bạn
           </p>
         </div>
 
-        {/* Badge trạng thái online */}
+        {/* Badge online */}
         <div
           className="flex-none flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
-          style={{ background: "rgba(255,255,255,0.18)", color: "white", backdropFilter: "blur(8px)" }}
+          style={{ background: "rgba(255,255,255,0.22)", color: "white", backdropFilter: "blur(8px)" }}
         >
           <span
             className="w-1.5 h-1.5 rounded-full"
@@ -67,7 +75,6 @@ export default function OnboardingPage() {
         }
       `}</style>
 
-      {/* Chat area */}
       <div className="flex-1 min-h-0">
         <OnboardingChat />
       </div>

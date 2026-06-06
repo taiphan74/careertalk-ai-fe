@@ -41,8 +41,8 @@ export function UserMessageBubble() {
       <div
         className="rounded-2xl rounded-br-sm px-4 py-2.5 max-w-[80%] text-white text-sm leading-relaxed"
         style={{
-          background: "linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)",
-          boxShadow: "0 2px 12px rgba(37,99,235,0.28), 0 1px 3px rgba(37,99,235,0.15)",
+          background: "linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%)",
+          boxShadow: "0 2px 12px rgba(96,165,250,0.28), 0 1px 3px rgba(59,130,246,0.15)",
         }}
       >
         <MessagePrimitive.Content />
@@ -109,8 +109,8 @@ function AIAvatar() {
     <div
       className="flex-none w-8 h-8 rounded-full flex items-center justify-center self-end mb-1"
       style={{
-        background: "linear-gradient(135deg, #2563EB 0%, #0891B2 100%)",
-        boxShadow: "0 2px 8px rgba(37,99,235,0.30)",
+        background: "linear-gradient(135deg, #60A5FA 0%, #38BDF8 100%)",
+        boxShadow: "0 2px 8px rgba(96,165,250,0.30)",
         flexShrink: 0,
       }}
     >
@@ -190,8 +190,8 @@ export function TypingIndicatorBubble() {
                 width: "7px",
                 height: "7px",
                 borderRadius: "50%",
-                background: `linear-gradient(135deg, #2563EB 0%, #0891B2 100%)`,
-                boxShadow: "0 0 6px rgba(37,99,235,0.5)",
+                background: `linear-gradient(135deg, #60A5FA 0%, #38BDF8 100%)`,
+                boxShadow: "0 0 6px rgba(96,165,250,0.5)",
                 animation: `typingBounce 1.1s ease-in-out infinite`,
                 animationDelay: `${i * 0.18}s`,
               }}
