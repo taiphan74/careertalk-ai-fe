@@ -22,7 +22,7 @@ export const ONBOARDING_STEPS = [
 export function getStepPrompt(stepIndex: number, profile: Partial<UserProfile>): string {
   const step = ONBOARDING_STEPS[stepIndex];
   if (!step) return "";
-  let prompt = step.prompt;
+  let prompt: string = step.prompt;
   for (const [key, value] of Object.entries(profile)) {
     prompt = prompt.replace(`{${key}}`, value);
   }

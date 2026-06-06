@@ -3,28 +3,36 @@
 import {
   useExternalStoreRuntime,
   type ExternalStoreMessageConverter,
+  type AppendMessage,
 } from "@assistant-ui/react";
-import type { ChatMessage } from "../types";
+import type { ChatMessage, BilingualContent } from "../types";
 
 /**
  * Tham số đầu vào cho hook adapter runtime.
- * Tách riêng để interface rõ ràng, dễ đọc.
  */
 interface UseOnboardingRuntimeParams {
-  messages: ChatMessage[];     // Tin nhắn từ useOnboardingFlow
-  isRunning: boolean;          // Trạng thái bot đang xử lý
-  onSend: (content: string) => Promise<void>; // Hàm xử lý gửi tin từ flow hook
+  messages: ChatMessage[];
+  isRunning: boolean;
+  onSend: (content: string) => Promise<void>;
 }
 
 /**
- * Hook adapter kết nối useOnboardingFlow với @assistant-ui/react.
+ * Kiểm tra content có phải BilingualContent hay không.
+ */
+function isBilingualContent(content: unknown): content is BilingualContent {
+  return (
+    typeof content === "object" &&
+    content !== null &&
+    "en" in content &&
+    "vi" in content
+  );
+}
+
+/**
+ * Hook adapter kết nối useOnboardingFlow với @assistant-ui/react v0.14.x.
  *
- * Trách nhiệm DUY NHẤT: chuyển đổi dữ liệu giữa 2 phía.
- * - Convert ChatMessage (format nội bộ) → format assistant-ui yêu cầu
- * - Extract text từ assistant-ui message → gọi onSend của flow hook
- *
- * Nếu đổi thư viện UI (bỏ assistant-ui) → chỉ cần viết lại hook này,
- * useOnboardingFlow giữ nguyên 100%.
+ * - convertMessage: chuyển ChatMessage → format assistant-ui
+ * - onNew: callback khi user gửi tin (v0.14.x thay thế onNewMessage)
  *
  * @param params - Messages, isRunning, onSend từ useOnboardingFlow
  * @returns Runtime object để truyền vào AssistantRuntimeProvider
@@ -37,22 +45,34 @@ export function useOnboardingRuntime({
   return useExternalStoreRuntime({
     messages,
     isRunning,
-    // Chuyển đổi ChatMessage nội bộ → format assistant-ui hiểu được
-    convertMessage: ((msg: ChatMessage) => ({
-      id: msg.id,
-      role: msg.role,
-      content: [{ type: "text" as const, text: msg.content }],
-    })) as ExternalStoreMessageConverter<ChatMessage>,
-    // Khi user gửi tin qua UI assistant-ui → extract text → delegate cho flow hook
-    onNewMessage: async (msg) => {
-      const text =
-        typeof msg.content === "string"
-          ? msg.content
-          : msg.content
-              .filter((c): c is { type: "text"; text: string } => c.type === "text")
-              .map((c) => c.text)
-              .join("");
-      await onSend(text);
+    convertMessage: ((msg: ChatMessage) => {
+      if (isBilingualContent(msg.content)) {
+        // Assistant message: serialize BilingualContent thành JSON string
+        // Bubble component sẽ parse lại để render song ngữ
+        return {
+          id: msg.id,
+          role: msg.role,
+          content: [
+            { type: "text" as const, text: JSON.stringify(msg.content) },
+          ],
+        };
+      }
+      // User message: content là string thuần
+      return {
+        id: msg.id,
+        role: msg.role,
+        content: [{ type: "text" as const, text: msg.content as string }],
+      };
+    }) as ExternalStoreMessageConverter<ChatMessage>,
+    // v0.14.x: onNew thay vì onNewMessage, nhận AppendMessage
+    onNew: async (message: AppendMessage) => {
+      const textParts = message.content.filter(
+        (c): c is { type: "text"; text: string } => c.type === "text"
+      );
+      const text = textParts.map((c) => c.text).join("");
+      if (text) {
+        await onSend(text);
+      }
     },
   });
 }
