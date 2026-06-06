@@ -30,6 +30,13 @@ export function useOnboardingFlow() {
   const stepRef = useRef(0);
   const completedRef = useRef(false);
   const initializedRef = useRef(false);
+  // Ref lưu messages mới nhất để tránh stale closure trong callbacks
+  const messagesRef = useRef<ChatMessage[]>([]);
+
+  // Sync messagesRef mỗi khi messages state thay đổi
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
 
   /**
    * Build context string để prepend vào user message gửi lên AI.
@@ -87,14 +94,14 @@ export function useOnboardingFlow() {
 
   /**
    * Xử lý khi user hoàn thành onboarding.
+   * Nhận snapshot messages tại thời điểm gọi để tránh stale closure.
    */
-  const handleCompletion = useCallback(async () => {
+  const handleCompletion = useCallback(async (currentMessages: ChatMessage[]) => {
     const finalProfile = { ...profileRef.current, completedAt: new Date().toISOString() };
     saveProfile(finalProfile);
     completedRef.current = true;
     toast.success("🎉 Thu thập thông tin thành công! Chào mừng bạn đến với CareerTalk AI.");
 
-    // Gọi AI để sinh completion message
     setIsRunning(true);
     const completeContextMsg: ChatMessage = {
       id: `complete-trigger-${Date.now()}`,
@@ -102,7 +109,7 @@ export function useOnboardingFlow() {
       content: `${buildContext(ONBOARDING_STEPS.length, finalProfile)}`,
     };
 
-    const allMessages = [...messages, completeContextMsg];
+    const allMessages = [...currentMessages, completeContextMsg];
     const result = await fetchAIResponse(allMessages);
 
     if (result) {
@@ -111,7 +118,6 @@ export function useOnboardingFlow() {
         { id: `assistant-${Date.now()}`, role: "assistant", content: result.content },
       ]);
     } else {
-      // Fallback hardcode completion
       setMessages((prev) => [
         ...prev,
         {
@@ -125,10 +131,12 @@ export function useOnboardingFlow() {
       ]);
     }
     setIsRunning(false);
-  }, [messages, buildContext, fetchAIResponse]);
+  }, [buildContext, fetchAIResponse]);
 
   /**
    * Xử lý khi user trả lời câu hỏi ở bước hiện tại.
+   * FIX: Thêm user message vào state TRƯỚC khi gọi AI.
+   * FIX: Dùng messagesRef thay vì messages closure để tránh stale.
    */
   const handleNextStep = useCallback(async (content: string) => {
     const currentStep = ONBOARDING_STEPS[stepRef.current];
@@ -141,8 +149,13 @@ export function useOnboardingFlow() {
     const nextStep = stepRef.current + 1;
     stepRef.current = nextStep;
 
-    // Chưa hoàn thành → gọi AI cho bước tiếp theo
+    // FIX: Add user message vào state ngay lập tức để UI hiển thị
+    const userMsg: ChatMessage = { id: `user-${Date.now()}`, role: "user", content };
+    setMessages((prev) => [...prev, userMsg]);
+
     setIsRunning(true);
+
+    // FIX: Dùng messagesRef.current (fresh) thay vì stale `messages` closure
     const contextPrefix = buildContext(nextStep, profileRef.current);
     const contextMsg: ChatMessage = {
       id: `step-context-${Date.now()}`,
@@ -150,19 +163,18 @@ export function useOnboardingFlow() {
       content: `${contextPrefix} ${content}`,
     };
 
-    const allMessages = [...messages, { id: `user-${Date.now()}`, role: "user", content }, contextMsg];
+    // Build từ ref (fresh) + user msg vừa gửi + context inject
+    const allMessages = [...messagesRef.current, userMsg, contextMsg];
     const result = await fetchAIResponse(allMessages);
 
     const expectedStepKey = ONBOARDING_STEPS[nextStep]?.key;
 
     if (result && result.currentStep === expectedStepKey) {
-      // AI response đúng step → dùng
       setMessages((prev) => [
         ...prev,
         { id: `assistant-${Date.now()}`, role: "assistant", content: result.content },
       ]);
     } else {
-      // Mismatch hoặc lỗi → fallback hardcode prompt
       console.warn(`[useOnboardingFlow] Step mismatch or fetch failed. Expected: ${expectedStepKey}, Got: ${result?.currentStep ?? "null"}. Using fallback.`);
       setMessages((prev) => [
         ...prev,
@@ -174,7 +186,7 @@ export function useOnboardingFlow() {
       ]);
     }
     setIsRunning(false);
-  }, [messages, buildContext, fetchAIResponse, createFallbackMessage]);
+  }, [buildContext, fetchAIResponse, createFallbackMessage]);
 
   /**
    * Fetch greeting từ AI khi component mount lần đầu.
@@ -189,7 +201,6 @@ export function useOnboardingFlow() {
       return;
     }
 
-    // Gửi context step 0 với nội dung chào hỏi để AI sinh greeting
     const contextMsg: ChatMessage = {
       id: "init-greeting-trigger",
       role: "user",
@@ -201,7 +212,6 @@ export function useOnboardingFlow() {
       if (result) {
         setMessages([{ id: "init-greeting", role: "assistant", content: result.content }]);
       } else {
-        // Fallback hardcode greeting
         setMessages([{ id: "init-greeting", role: "assistant", content: createFallbackMessage(0, {}) }]);
       }
       setIsRunning(false);
@@ -210,23 +220,25 @@ export function useOnboardingFlow() {
 
   /**
    * Xử lý khi user gửi tin nhắn.
-   * Delegate sang handleCompletion hoặc handleNextStep tùy trạng thái.
+   * FIX: Truyền messagesRef.current vào handleCompletion thay vì dùng closure.
    */
   const handleSend = useCallback(async (content: string) => {
     if (completedRef.current) return;
 
-    // Kiểm tra xem đây có phải bước cuối cùng không
     const isLastStep = stepRef.current === ONBOARDING_STEPS.length - 1;
 
     if (isLastStep) {
-      // Bước cuối → lưu profile và hoàn thành
+      // Bước cuối → add user msg vào state, lưu profile, hoàn thành
       const currentStep = ONBOARDING_STEPS[stepRef.current];
+      const userMsg: ChatMessage = { id: `user-${Date.now()}`, role: "user", content };
+      setMessages((prev) => [...prev, userMsg]);
+
       if (currentStep) {
         profileRef.current[currentStep.field as keyof UserProfile] = content;
       }
-      await handleCompletion();
+      // Truyền snapshot fresh thay vì dùng stale closure
+      await handleCompletion([...messagesRef.current, userMsg]);
     } else {
-      // Chưa phải bước cuối → xử lý bước tiếp theo
       await handleNextStep(content);
     }
   }, [handleCompletion, handleNextStep]);
