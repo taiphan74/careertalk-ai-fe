@@ -2,7 +2,7 @@
 
 import { ComposerPrimitive } from "@assistant-ui/react";
 import { TranslationHint } from "./TranslationHint";
-import { useOnboardingStore } from "../store/useOnboardingStore";
+import { GRADIENTS, GLASS, SHADOWS } from "../lib/styles";
 
 /**
  * Thanh nhập liệu — Premium glassmorphism style.
@@ -10,25 +10,18 @@ import { useOnboardingStore } from "../store/useOnboardingStore";
  * Input: inset glass với focus ring glow ocean blue.
  * Send: gradient nổi bật, hover glow pulse, scale animation.
  * Giữ nguyên Ocean Focus palette từ globals.css.
+ *
+ * Visual tokens: import từ ../lib/styles (GRADIENTS.*, GLASS.*, SHADOWS.*).
  */
-
-
 export function ChatComposer() {
   return (
     <div
       className="flex-none px-4 py-4 relative"
       style={{
-        /* Layered glass background */
-        background:
-          "linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(240,249,255,0.88) 100%)",
-        backdropFilter: "blur(24px) saturate(180%)",
-        WebkitBackdropFilter: "blur(24px) saturate(180%)",
-        /* Border gradient top */
+        ...GLASS.composer,
         borderTop: "1px solid transparent",
         backgroundClip: "padding-box",
-        /* Top glow line */
-        boxShadow:
-          "0 -1px 0 0 rgba(147,197,253,0.55), 0 -8px 32px rgba(96,165,250,0.10), 0 -2px 8px rgba(37,99,235,0.06)",
+        boxShadow: SHADOWS.composer,
       }}
     >
       {/* Decorative top glow bar */}
@@ -40,8 +33,7 @@ export function ChatComposer() {
           left: "10%",
           right: "10%",
           height: "1px",
-          background:
-            "linear-gradient(90deg, transparent, rgba(96,165,250,0.7) 30%, rgba(56,189,248,0.8) 50%, rgba(96,165,250,0.7) 70%, transparent)",
+          background: GRADIENTS.glowBar,
           borderRadius: "9999px",
         }}
       />
@@ -54,19 +46,15 @@ export function ChatComposer() {
             className="flex-1 relative"
             style={{
               borderRadius: "20px",
-              background: "rgba(255,255,255,0.70)",
-              boxShadow:
-                "inset 0 1px 3px rgba(37,99,235,0.08), inset 0 0 0 1.5px rgba(191,219,254,0.7), 0 1px 4px rgba(255,255,255,0.9)",
-              backdropFilter: "blur(8px)",
+              ...GLASS.input,
+              boxShadow: SHADOWS.inputNormal,
               transition: "box-shadow 0.2s ease",
             }}
             onFocusCapture={(e) => {
-              (e.currentTarget as HTMLElement).style.boxShadow =
-                "inset 0 1px 3px rgba(37,99,235,0.06), inset 0 0 0 1.5px rgba(96,165,250,0.55), 0 0 0 3.5px rgba(147,197,253,0.22), 0 1px 4px rgba(255,255,255,0.9)";
+              (e.currentTarget as HTMLElement).style.boxShadow = SHADOWS.inputFocus;
             }}
             onBlurCapture={(e) => {
-              (e.currentTarget as HTMLElement).style.boxShadow =
-                "inset 0 1px 3px rgba(37,99,235,0.08), inset 0 0 0 1.5px rgba(191,219,254,0.7), 0 1px 4px rgba(255,255,255,0.9)";
+              (e.currentTarget as HTMLElement).style.boxShadow = SHADOWS.inputNormal;
             }}
           >
             <ComposerPrimitive.Input
@@ -85,23 +73,23 @@ export function ChatComposer() {
             />
           </div>
 
-          {/* Send button — lưu translation vào store trước khi send */}
+          {/* Send button */}
           <ComposerPrimitive.Send
             className="flex-none flex items-center justify-center w-11 h-11 rounded-2xl text-white disabled:opacity-35 disabled:cursor-not-allowed"
             style={{
-              background: "linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%)",
-              boxShadow: "0 4px 14px rgba(59,130,246,0.45), 0 1px 4px rgba(6,182,212,0.20), inset 0 1px 0 rgba(255,255,255,0.25)",
+              background: GRADIENTS.ocean,
+              boxShadow: SHADOWS.sendButton,
               transition: "transform 0.15s ease, box-shadow 0.15s ease",
             }}
             onMouseEnter={(e) => {
               const el = e.currentTarget as HTMLElement;
               el.style.transform = "scale(1.07)";
-              el.style.boxShadow = "0 6px 20px rgba(59,130,246,0.55), 0 2px 8px rgba(6,182,212,0.30), inset 0 1px 0 rgba(255,255,255,0.25)";
+              el.style.boxShadow = SHADOWS.sendButtonHover;
             }}
             onMouseLeave={(e) => {
               const el = e.currentTarget as HTMLElement;
               el.style.transform = "scale(1)";
-              el.style.boxShadow = "0 4px 14px rgba(59,130,246,0.45), 0 1px 4px rgba(6,182,212,0.20), inset 0 1px 0 rgba(255,255,255,0.25)";
+              el.style.boxShadow = SHADOWS.sendButton;
             }}
             onMouseDown={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(0.94)"; }}
             onMouseUp={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(1.07)"; }}

@@ -13,10 +13,13 @@
  * - Vị trí: sau Messages trong Viewport
  *
  * NO framer-motion — pure CSS keyframe đủ mượt.
+ *
+ * Visual tokens: import từ ../../lib/styles (GLASS.assistantBubble, SHADOWS.*, GRADIENTS.avatarOcean).
  */
 
 import { AIAvatar } from "./AIAvatar";
 import { injectStyles } from "./bubble-styles";
+import { GRADIENTS, GLASS, SHADOWS } from "../../lib/styles";
 
 /**
  * Typing indicator bubble component.
@@ -32,10 +35,8 @@ export function TypingIndicatorBubble() {
       <div
         className="rounded-2xl rounded-bl-sm px-4 py-3"
         style={{
-          background: "rgba(240,249,255,0.85)",
-          backdropFilter: "blur(12px)",
-          border: "1px solid rgba(191,219,254,0.6)",
-          boxShadow: "0 2px 12px rgba(37,99,235,0.08), 0 1px 3px rgba(0,0,0,0.05)",
+          ...GLASS.assistantBubble,
+          boxShadow: SHADOWS.glassBubble,
           minWidth: "64px",
         }}
       >
@@ -48,8 +49,8 @@ export function TypingIndicatorBubble() {
                 width: "7px",
                 height: "7px",
                 borderRadius: "50%",
-                background: `linear-gradient(135deg, #60A5FA 0%, #38BDF8 100%)`,
-                boxShadow: "0 0 6px rgba(96,165,250,0.5)",
+                background: GRADIENTS.avatarOcean,
+                boxShadow: SHADOWS.typingDot,
                 animation: `typingBounce 1.1s ease-in-out infinite`,
                 animationDelay: `${i * 0.18}s`,
               }}

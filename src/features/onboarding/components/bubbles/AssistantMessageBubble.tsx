@@ -16,11 +16,14 @@
  * - Guard useMessage() — nếu content rỗng (AI đang chạy) → return null
  * - assistant-ui tự inject AssistantMessage rỗng khi isRunning=true
  * - Nếu không guard → render ô trắng trước khi có TypingIndicatorBubble
+ *
+ * Visual tokens: import từ ../../lib/styles (GLASS.assistantBubble, SHADOWS.glassBubble).
  */
 
 import { MessagePrimitive, useMessage } from "@assistant-ui/react";
 import { AIAvatar } from "./AIAvatar";
 import { injectStyles, parseBilingualContent } from "./bubble-styles";
+import { GLASS, SHADOWS } from "../../lib/styles";
 
 /**
  * Render nội dung song ngữ EN (chính) + VI (phụ, mờ hơn).
@@ -82,10 +85,8 @@ export function AssistantMessageBubble() {
       <div
         className="rounded-2xl rounded-bl-sm px-4 py-3 max-w-[80%]"
         style={{
-          background: "rgba(240,249,255,0.85)",
-          backdropFilter: "blur(12px)",
-          border: "1px solid rgba(191,219,254,0.6)",
-          boxShadow: "0 2px 12px rgba(37,99,235,0.08), 0 1px 3px rgba(0,0,0,0.05)",
+          ...GLASS.assistantBubble,
+          boxShadow: SHADOWS.glassBubble,
         }}
       >
         <BilingualAssistantContent />

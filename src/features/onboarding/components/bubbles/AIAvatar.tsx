@@ -2,9 +2,13 @@
  * Avatar SVG cho AI — icon sóng ocean với gradient.
  *
  * Dùng trong AssistantMessageBubble và TypingIndicatorBubble.
- * Style: gradient ocean blue (#60A5FA → #38BDF8), shadow glow tinh tế.
+ * Style: gradient ocean blue, shadow glow tinh tế.
  * Hai lớp sóng SVG: sóng chính (đậm) + sóng phụ (mờ 60%).
+ *
+ * Visual tokens: import từ ../lib/styles (GRADIENTS.avatarOcean, SHADOWS.avatar).
  */
+
+import { GRADIENTS, SHADOWS } from "../../lib/styles";
 
 /**
  * SVG avatar component cho AI assistant.
@@ -17,8 +21,8 @@ export function AIAvatar() {
     <div
       className="flex-none w-8 h-8 rounded-full flex items-center justify-center self-end mb-1"
       style={{
-        background: "linear-gradient(135deg, #60A5FA 0%, #38BDF8 100%)",
-        boxShadow: "0 2px 8px rgba(96,165,250,0.30)",
+        background: GRADIENTS.avatarOcean,
+        boxShadow: SHADOWS.avatar,
         flexShrink: 0,
       }}
     >
