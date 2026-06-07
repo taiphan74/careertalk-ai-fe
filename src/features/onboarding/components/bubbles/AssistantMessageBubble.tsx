@@ -4,34 +4,44 @@
  */
 "use client";
 
+import { memo } from "react";
+
 import { MessagePrimitive, useMessage } from "@assistant-ui/react";
 import { AIAvatar } from "./AIAvatar";
 import { injectStyles, parseBilingualContent } from "./bubble-styles";
+import { TokenizedText } from "../TokenizedText";
 
 /**
  * Render nội dung song ngữ EN (chính) + VI (phụ, mờ hơn).
  * Fallback sang plain text nếu không parse được JSON.
  */
+/**
+ * Stable Text renderer cho assistant message.
+ * Memoized để ngăn assistant-ui unmount/remount khi parent re-render,
+ * giữ nguyên WordTooltip open state.
+ */
+const BilingualTextRenderer = memo(function BilingualTextRenderer({ text }: { text: string }) {
+  const bilingual = parseBilingualContent(text);
+  if (bilingual) {
+    return (
+      <div>
+        <p className="text-sm leading-relaxed font-medium text-foreground">
+          <TokenizedText text={bilingual.en} />
+        </p>
+        <p className="text-xs mt-1.5 leading-relaxed text-muted-foreground border-t border-border pt-1.5">
+          {bilingual.vi}
+        </p>
+      </div>
+    );
+  }
+  return <p className="text-sm leading-relaxed text-foreground">{text}</p>;
+});
+
 function BilingualAssistantContent() {
   return (
     <MessagePrimitive.Content
       components={{
-        Text: ({ text }) => {
-          const bilingual = parseBilingualContent(text);
-          if (bilingual) {
-            return (
-              <div>
-                <p className="text-sm leading-relaxed font-medium text-foreground">
-                  {bilingual.en}
-                </p>
-                <p className="text-xs mt-1.5 leading-relaxed text-muted-foreground border-t border-border pt-1.5">
-                  {bilingual.vi}
-                </p>
-              </div>
-            );
-          }
-          return <p className="text-sm leading-relaxed text-foreground">{text}</p>;
-        },
+        Text: BilingualTextRenderer,
       }}
     />
   );

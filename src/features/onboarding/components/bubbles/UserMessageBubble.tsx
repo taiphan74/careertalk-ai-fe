@@ -7,6 +7,7 @@
 
 import { MessagePrimitive, useMessage } from "@assistant-ui/react";
 import { useOnboardingStore } from "../../store/useOnboardingStore";
+import { TokenizedText } from "../TokenizedText";
 
 export function UserMessageBubble() {
   const message = useMessage();
@@ -21,9 +22,9 @@ export function UserMessageBubble() {
 
       {/* Translation Pill — hiển thị bản dịch EN nếu có */}
       {translationEn && (
-        <div className="max-w-[80%] px-3 py-1.5 rounded-[10px] bg-glass-bubble text-xs italic leading-relaxed text-foreground shadow-sm">
-          <span className="opacity-60 text-[10px] not-italic font-semibold mr-1">EN</span>
-          {translationEn}
+        <div className="max-w-[80%] px-3 py-1.5 rounded-[10px] bg-white border border-gray-200 text-xs italic leading-relaxed text-gray-700 shadow-sm">
+          <span className="not-italic font-bold text-[10px] text-primary mr-1.5">EN</span>
+          <TokenizedText text={translationEn} />
         </div>
       )}
     </div>
