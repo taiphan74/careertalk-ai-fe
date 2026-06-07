@@ -1,8 +1,6 @@
 /**
  * @file page.tsx
- * @description Thin route wrapper cho /flashcards.
- * Business logic trong useGenerateFlashcards hook.
- * UI state (showCreateModal) giữ ở đây vì chỉ dùng trong page này.
+ * @description Thin route wrapper cho /flashcards sử dụng Shared FeatureHeader.
  */
 "use client";
 
@@ -12,6 +10,7 @@ import { useGenerateFlashcards } from "@/features/flashcards/hooks/useGenerateFl
 import { DeckList } from "@/features/flashcards/components/DeckList";
 import { CardViewer } from "@/features/flashcards/components/CardViewer";
 import { CreateDeckModal } from "@/features/flashcards/components/CreateDeckModal";
+import { FeatureHeader } from "@/components/shared/FeatureHeader";
 
 export default function FlashcardsPage() {
   const { currentDeck } = useFlashcards();
@@ -19,16 +18,15 @@ export default function FlashcardsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
-      <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-          <a href="/" className="text-gray-600 hover:text-gray-900 transition">← Về trang chủ</a>
-          <h1 className="text-xl font-bold text-gray-900">📚 Flashcards</h1>
-          <div className="w-24" />
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 flex flex-col">
+      <FeatureHeader
+        title="📚 Flashcards"
+        subtitle="Hệ thống thẻ từ vựng thông minh hỗ trợ phỏng vấn"
+        backUrl="/"
+        backLabel="Về trang chủ"
+      />
 
-      <main className="py-8">
+      <main className="py-8 flex-1 container max-w-6xl mx-auto px-4">
         {currentDeck ? (
           <CardViewer />
         ) : (
