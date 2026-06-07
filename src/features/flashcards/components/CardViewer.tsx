@@ -1,124 +1,104 @@
 /**
- * Component hiển thị card viewer để study một deck.
+ * @file CardViewer.tsx
+ * @description Trình điều hướng ôn tập thẻ flashcards — Sử dụng tham số đồng bộ chính xác với Zustand Store.
  */
 "use client";
 
-import { useFlashcards } from "../hooks/useFlashcards";
+import { useEffect } from "react";
 import { FlashcardCard } from "./FlashcardCard";
+import { Button } from "@/components/ui/button";
+import { useFlashcards } from "../hooks/useFlashcards";
 
-export function CardViewer() {
-  const {
-    currentDeck,
-    currentCard,
-    currentCardIndex,
-    isFlipped,
+interface CardViewerProps {
+  /** Hàm callback kích hoạt khi người dùng chọn thoát học */
+  onBack: () => void;
+}
+
+export function CardViewer({ onBack }: CardViewerProps) {
+  const { 
+    currentDeck, 
+    currentCard, 
+    currentCardIndex, 
+    isFlipped, 
     isCompleted,
-    nextCard,
-    previousCard,
-    toggleFlip,
-    markCardAsReviewed,
-    setCurrentDeck,
+    toggleFlip, 
+    resetFlip, 
+    nextCard, 
+    markCardAsReviewed 
   } = useFlashcards();
 
-  if (!currentDeck) {
+  // Tự động reset trạng thái lật khi chuyển sang thẻ mới
+  useEffect(() => {
+    resetFlip();
+  }, [currentCardIndex, resetFlip]);
+
+  // Nếu đã hoàn thành tất cả các thẻ trong bộ deck
+  useEffect(() => {
+    if (isCompleted) {
+      onBack();
+    }
+  }, [isCompleted, onBack]);
+
+  if (!currentDeck || !currentCard) {
     return (
-      <div className="max-w-4xl mx-auto p-8 text-center">
-        <p className="text-gray-600">Không có bộ thẻ nào được chọn.</p>
-        <button
-          onClick={() => setCurrentDeck(null)}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-        >
-          Quay lại danh sách
-        </button>
+      <div className="max-w-xl mx-auto text-center py-12 bg-surface border border-border rounded-2xl p-6">
+        <p className="text-text-secondary mb-4 font-medium">Bộ thẻ này hiện không có dữ liệu học hoặc đã hoàn thành.</p>
+        <Button onClick={onBack}>Quay lại danh sách</Button>
       </div>
     );
   }
 
-  const isFirstCard = currentCardIndex === 0;
-
-  // Completion screen
-  if (isCompleted || !currentCard) {
-    return (
-      <div className="max-w-4xl mx-auto p-8 text-center py-16">
-        <div className="text-6xl mb-4">🎉</div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Hoàn thành bộ thẻ!</h2>
-        <p className="text-gray-600 mb-8">
-          Bạn đã ôn tập xong {currentDeck.cards.length} thẻ trong bộ "{currentDeck.name}"
-        </p>
-        <button
-          onClick={() => setCurrentDeck(null)}
-          className="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg font-semibold hover:shadow-lg transition"
-        >
-          Quay lại danh sách
-        </button>
-      </div>
-    );
-  }
-
-  const handleSwipe = (direction: "left" | "right") => {
-    const remembered = direction === "right";
+  const handleAction = (remembered: boolean) => {
+    // Truyền chính xác 3 tham số theo đặc tả của Zustand store
     markCardAsReviewed(currentDeck.id, currentCard.id, remembered);
-    setTimeout(() => {
-      nextCard();
-    }, 300);
+    nextCard();
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
-      <div className="flex justify-between items-center mb-8">
-        <button
-          onClick={() => setCurrentDeck(null)}
-          className="px-4 py-2 bg-white border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-gray-400 transition"
+    <div className="max-w-xl mx-auto p-4 space-y-6">
+      {/* Header điều khiển */}
+      <div className="flex justify-between items-center border-b border-border pb-3">
+        <Button 
+          variant="ghost" 
+          onClick={onBack} 
+          size="sm" 
+          className="font-medium text-text-secondary hover:text-foreground"
         >
-          ← Thoát
-        </button>
-        <div className="text-center">
-          <h2 className="text-xl font-bold text-gray-900">{currentDeck.name}</h2>
-          <div className="text-sm text-gray-600">Thẻ {currentCardIndex + 1} / {currentDeck.cards.length}</div>
-        </div>
-        <div className="w-24" />
-      </div>
-
-      <div className="mb-8">
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-300"
-            style={{ width: `${((currentCardIndex + 1) / currentDeck.cards.length) * 100}%` }}
-          />
+          ← Thoát học
+        </Button>
+        <div className="text-sm font-semibold text-text-tertiary bg-surface px-3 py-1 rounded-full border border-border/40">
+          Tiến độ: <span className="text-foreground">{currentCardIndex + 1}</span>/{currentDeck.cards.length}
         </div>
       </div>
 
-      <div className="flex justify-center mb-8">
-        <FlashcardCard
-          card={currentCard}
-          isFlipped={isFlipped}
-          onFlip={toggleFlip}
-          onSwipe={handleSwipe}
-        />
-      </div>
+      {/* Thẻ 3D hiển thị */}
+      <FlashcardCard 
+        card={currentCard} 
+        isFlipped={isFlipped} 
+        onFlip={toggleFlip} 
+      />
 
-      <div className="flex justify-center gap-4">
-        <button
-          onClick={previousCard}
-          disabled={isFirstCard}
-          className="px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-gray-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
+      {/* Nút bấm hành động */}
+      <div className="flex gap-4 justify-center pt-2">
+        <Button
+          variant="outline"
+          className="flex-1 py-6 font-semibold border-accent/30 text-accent hover:bg-accent-light"
+          onClick={(e) => {
+            e.stopPropagation(); // Tránh kích hoạt sự kiện lật thẻ của cha
+            handleAction(false); // Chưa thuộc -> remembered = false
+          }}
         >
-          ← Trước
-        </button>
-        <button
-          onClick={nextCard}
-          disabled={isCompleted}
-          className="px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-gray-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          ❌ Chưa thuộc (Học lại)
+        </Button>
+        <Button
+          className="flex-1 py-6 font-semibold bg-gradient-to-r from-success to-emerald-500 text-white shadow-md hover:shadow-lg"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleAction(true); // Đã thuộc -> remembered = true
+          }}
         >
-          Sau →
-        </button>
-      </div>
-
-      <div className="mt-8 text-center text-sm text-gray-500">
-        <div className="flex justify-center gap-8">
-          <div>← Vuốt trái: Cần ôn</div>
-          <div>Swipe phải: Đã nhớ →</div>
-        </div>
+          ✅ Đã thuộc làu
+        </Button>
       </div>
     </div>
   );

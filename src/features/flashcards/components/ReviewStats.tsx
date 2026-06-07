@@ -1,12 +1,9 @@
 /**
- * Component hiển thị thống kê ôn tập cho một deck.
- * 
- * Shows:
- * - Tổng số thẻ
- * - Số thẻ mastered / learning / new
- * - Progress bar
- * - Completion rate
+ * @file ReviewStats.tsx
+ * @description Hiển thị trạng thái phân phối thẻ học trong bộ deck — Sử dụng màu ngữ nghĩa chuẩn.
  */
+"use client";
+
 import type { FlashcardDeck } from "../types";
 
 interface ReviewStatsProps {
@@ -14,45 +11,27 @@ interface ReviewStatsProps {
 }
 
 export function ReviewStats({ deck }: ReviewStatsProps) {
-  const total = deck.cards.length;
-  const mastered = deck.cards.filter((c) => c.status === "mastered").length;
-  const learning = deck.cards.filter((c) => c.status === "learning").length;
-  const newCards = deck.cards.filter((c) => c.status === "new").length;
-
-  const completionRate = total > 0 ? Math.round((mastered / total) * 100) : 0;
+  const stats = deck.cards.reduce(
+    (acc, card) => {
+      acc[card.status] = (acc[card.status] || 0) + 1;
+      return acc;
+    },
+    { new: 0, learning: 0, review: 0 } as Record<string, number>
+  );
 
   return (
-    <div className="space-y-3">
-      {/* Progress bar */}
-      <div>
-        <div className="flex justify-between text-xs text-gray-600 mb-1">
-          <span>Tiến độ</span>
-          <span>{completionRate}%</span>
-        </div>
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-gradient-to-r from-green-500 to-emerald-500 transition-all"
-            style={{ width: `${completionRate}%` }}
-          />
-        </div>
+    <div className="flex gap-2 text-xs font-medium w-full">
+      <div className="flex-1 text-center py-1.5 px-2 bg-primary/10 text-primary rounded-lg border border-primary/20">
+        <div>Mới</div>
+        <div className="text-sm font-bold mt-0.5">{stats.new}</div>
       </div>
-
-      {/* Stats grid */}
-      <div className="grid grid-cols-3 gap-2 text-center">
-        <div className="p-2 bg-green-50 rounded-lg">
-          <div className="text-lg font-bold text-green-700">{mastered}</div>
-          <div className="text-xs text-green-600">Đã thuộc</div>
-        </div>
-        
-        <div className="p-2 bg-yellow-50 rounded-lg">
-          <div className="text-lg font-bold text-yellow-700">{learning}</div>
-          <div className="text-xs text-yellow-600">Đang học</div>
-        </div>
-        
-        <div className="p-2 bg-gray-50 rounded-lg">
-          <div className="text-lg font-bold text-gray-700">{newCards}</div>
-          <div className="text-xs text-gray-600">Mới</div>
-        </div>
+      <div className="flex-1 text-center py-1.5 px-2 bg-accent/10 text-accent rounded-lg border border-accent/20">
+        <div>Đang học</div>
+        <div className="text-sm font-bold mt-0.5">{stats.learning}</div>
+      </div>
+      <div className="flex-1 text-center py-1.5 px-2 bg-success/10 text-success rounded-lg border border-success/20">
+        <div>Thuộc</div>
+        <div className="text-sm font-bold mt-0.5">{stats.review}</div>
       </div>
     </div>
   );

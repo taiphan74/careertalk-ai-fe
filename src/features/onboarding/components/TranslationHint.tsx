@@ -1,19 +1,15 @@
+/**
+ * @file TranslationHint.tsx
+ * @description Floating card hiển thị bản dịch EN + highlight lỗi ngữ pháp chuẩn hóa sang màu ngữ nghĩa.
+ * Vị trí: float phía TRÊN composer input, slide-up từ dưới lên.
+ */
 "use client";
 
 import { useEffect, useState, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { translateCheck } from "../lib/translate-check";
 import { useOnboardingStore } from "../store/useOnboardingStore";
-import { GRADIENTS, GLASS, SHADOWS, COLORS, SEPARATORS } from "../lib/styles";
 
-/**
- * Floating card hiển thị bản dịch EN + highlight lỗi ngữ pháp.
- * Vị trí: float phía TRÊN composer input, slide-up từ dưới lên.
- * Animation: framer-motion spring — xuất hiện/biến mất mượt.
- * Không phụ thuộc internal API @assistant-ui/react.
- *
- * Visual tokens: import từ ../lib/styles (GLASS.translationCard, GRADIENTS.accentBar, COLORS.*, SHADOWS.*).
- */
 export function TranslationHint() {
   const [text, setText] = useState("");
   const [hoveredError, setHoveredError] = useState<number | null>(null);
@@ -55,7 +51,7 @@ export function TranslationHint() {
     };
   }, []);
 
-  // Debounce gọi API
+  // Debounce gọi API phân tích dịch thuật
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
     if (!text || text.trim().length < 3) {
@@ -73,7 +69,7 @@ export function TranslationHint() {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [text]);
+  }, [text, setTranslationResult]);
 
   const hasContent = result?.translation || isLoading;
 
@@ -86,248 +82,66 @@ export function TranslationHint() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 8, scale: 0.97 }}
           transition={{ type: "spring", stiffness: 420, damping: 28 }}
-          style={{
-            position: "absolute",
-            bottom: "calc(100% + 8px)",
-            left: "16px",
-            right: "16px",
-            zIndex: 50,
-            ...GLASS.translationCard,
-            borderRadius: "16px",
-            boxShadow: SHADOWS.translationCard,
-            overflow: "hidden",
-          }}
+          className="absolute bottom-[calc(100%+8px)] left-4 right-4 z-40 p-4 rounded-xl bg-glass-bubble shadow-xl border border-border bg-clip-padding flex flex-col gap-2.5 max-h-56 overflow-y-auto"
         >
-          {/* Accent bar trên đầu card */}
-          <div
-            style={{
-              height: "3px",
-              background: GRADIENTS.accentBar,
-              borderRadius: "16px 16px 0 0",
-            }}
-          />
+          {/* Decorative accent top bar */}
+          <div className="absolute top-0 left-0 right-0 h-[2.5px] rounded-t-xl bg-gradient-to-r from-primary to-accent" />
 
-          <div style={{ padding: "12px 14px" }}>
-            {/* Loading shimmer */}
-            {isLoading && !result && (
-              <div className="flex items-center gap-2">
-                <div
-                  style={{
-                    width: "16px",
-                    height: "16px",
-                    borderRadius: "50%",
-                    background: GRADIENTS.ocean,
-                    flexShrink: 0,
-                  }}
-                />
-                <div style={{ flex: 1 }}>
-                  <motion.div
-                    animate={{ opacity: [0.4, 0.9, 0.4] }}
-                    transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-                    style={{
-                      height: "10px",
-                      borderRadius: "6px",
-                      background: GRADIENTS.shimmer,
-                      width: "65%",
-                    }}
-                  />
-                </div>
+          {/* Trạng thái Loading khi AI đang phân tích dữ liệu */}
+          {isLoading && (
+            <div className="flex items-center gap-2 py-1 text-xs font-semibold text-text-tertiary">
+              <span className="w-3 h-3 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+              <span>AI đang phân tích ngữ pháp...</span>
+            </div>
+          )}
+
+          {/* Hiển thị kết quả khi đã có dữ liệu dịch thuật */}
+          {!isLoading && result && (
+            <div className="space-y-2.5 animate-fadeIn">
+              {/* Dòng chữ Tiếng Anh đã dịch */}
+              <div className="text-sm font-medium leading-relaxed text-foreground">
+                <span className="text-[11px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-primary/10 text-primary mr-1.5 align-middle">
+                  EN
+                </span>
+                <span className="align-middle">{result.translation}</span>
               </div>
-            )}
 
-            {/* Translation */}
-            {result?.translation && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              >
-                {/* Header row */}
-                <div className="flex items-center gap-1.5 mb-2">
-                  <div
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      borderRadius: "6px",
-                      background: GRADIENTS.ocean,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0,
-                      boxShadow: SHADOWS.iconPrimary,
-                    }}
-                  >
-                    {/* Spark icon */}
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 2L9 9H2L7.5 14L5.5 21L12 17L18.5 21L16.5 14L22 9H15L12 2Z"
-                        fill="white" />
-                    </svg>
+              {/* Phân tích lỗi ngữ pháp Grammars */}
+              {result.errors && result.errors.length > 0 && (
+                <div className="border-t border-border/60 pt-2 flex flex-col gap-1.5">
+                  <div className="text-[11px] font-bold text-text-tertiary uppercase tracking-wider">
+                    Gợi ý sửa lỗi ngữ pháp ({result.errors.length})
                   </div>
-                  <span
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: 700,
-                      letterSpacing: "0.06em",
-                      textTransform: "uppercase",
-                      color: "var(--primary)",
-                    }}
-                  >
-                    AI Translation
-                  </span>
-                </div>
-
-                {/* Translation text */}
-                <p
-                  style={{
-                    fontSize: "13px",
-                    fontWeight: 500,
-                    lineHeight: 1.55,
-                    color: "var(--foreground)",
-                    fontStyle: "italic",
-                    paddingLeft: "4px",
-                    borderLeft: "2.5px solid var(--accent)",
-                    marginBottom: result.errors.length > 0 ? "10px" : "0",
-                  }}
-                >
-                  {result.translation}
-                </p>
-
-                {/* Error chips */}
-                {result.errors.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1, duration: 0.2 }}
-                  >
-                    {/* Separator */}
-                    <div
-                      style={{
-                        height: "1px",
-                        background: SEPARATORS.glass,
-                        marginBottom: "8px",
-                      }}
-                    />
-
-                    <div className="flex items-center gap-1.5 mb-1.5">
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="10" stroke={COLORS.errorIcon} strokeWidth="2"/>
-                        <path d="M12 7v5M12 16h.01" stroke={COLORS.errorIcon} strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
+                  <div className="flex flex-wrap gap-1.5">
+                    {result.errors.map((err, i) => (
                       <span
-                        style={{
-                          fontSize: "10px",
-                          fontWeight: 700,
-                          letterSpacing: "0.05em",
-                          textTransform: "uppercase",
-                          color: "var(--danger)",
-                        }}
+                        key={i}
+                        onMouseEnter={() => setHoveredError(i)}
+                        onMouseLeave={() => setHoveredError(null)}
+                        className="text-xs px-2.5 py-1 rounded-md font-medium border transition cursor-help bg-danger-light text-danger border-danger/20 hover:bg-danger/15"
                       >
-                        Gợi ý sửa
+                        {err.wrong} → <span className="font-bold text-success">{err.correct}</span>
                       </span>
-                    </div>
-
-                    <div className="flex flex-wrap gap-1.5">
-                      {result.errors.map((err, idx) => (
-                        <motion.div
-                          key={idx}
-                          initial={{ opacity: 0, scale: 0.85 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.12 + idx * 0.06, type: "spring", stiffness: 500, damping: 28 }}
-                          style={{ position: "relative" }}
-                          onMouseEnter={() => setHoveredError(idx)}
-                          onMouseLeave={() => setHoveredError(null)}
-                        >
-                          {/* Error chip */}
-                          <div
-                            style={{
-                              display: "inline-flex",
-                              alignItems: "center",
-                              gap: "5px",
-                              padding: "4px 9px",
-                              borderRadius: "9999px",
-                              background: COLORS.errorChipBg,
-                              border: `1px solid ${COLORS.errorChipBorder}`,
-                              cursor: "help",
-                              boxShadow: SHADOWS.errorChip,
-                            }}
-                          >
-                            <span
-                              style={{
-                                fontSize: "12px",
-                                fontWeight: 600,
-                                color: COLORS.errorText,
-                                textDecoration: "line-through",
-                                textDecorationColor: COLORS.errorTextDecor,
-                              }}
-                            >
-                              {err.wrong}
-                            </span>
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
-                              <path d="M5 12H19M13 6l6 6-6 6" stroke={COLORS.arrowGreen} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            <span
-                              style={{
-                                fontSize: "12px",
-                                fontWeight: 600,
-                                color: COLORS.correctText,
-                              }}
-                            >
-                              {err.correct}
-                            </span>
-                          </div>
-
-                          {/* Tooltip reason */}
-                          <AnimatePresence>
-                            {hoveredError === idx && (
-                              <motion.div
-                                initial={{ opacity: 0, y: 4, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: 4, scale: 0.95 }}
-                                transition={{ duration: 0.15 }}
-                                style={{
-                                  position: "absolute",
-                                  bottom: "calc(100% + 6px)",
-                                  left: "50%",
-                                  transform: "translateX(-50%)",
-                                  padding: "6px 10px",
-                                  borderRadius: "8px",
-                                  background: COLORS.tooltipBg,
-                                  color: COLORS.tooltipText,
-                                  fontSize: "11px",
-                                  lineHeight: 1.4,
-                                  zIndex: 60,
-                                  boxShadow: SHADOWS.tooltip,
-                                  maxWidth: "200px",
-                                  whiteSpace: "normal",
-                                  textAlign: "center",
-                                }}
-                              >
-                                {err.reason}
-                                {/* Arrow */}
-                                <div
-                                  style={{
-                                    position: "absolute",
-                                    top: "100%",
-                                    left: "50%",
-                                    transform: "translateX(-50%)",
-                                    width: 0,
-                                    height: 0,
-                                    borderLeft: "5px solid transparent",
-                                    borderRight: "5px solid transparent",
-                                    borderTop: `5px solid ${COLORS.tooltipBg}`,
-                                  }}
-                                />
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </motion.div>
-            )}
-          </div>
+                    ))}
+                  </div>
+                  
+                  {/* Giải thích chi tiết lỗi khi di chuột hover */}
+                  <AnimatePresence>
+                    {hoveredError !== null && result.errors[hoveredError] && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="text-[11px] leading-relaxed text-text-secondary bg-surface p-2 rounded-lg border border-border"
+                      >
+                        <span className="font-bold text-danger">Lý do:</span> {result.errors[hoveredError].reason}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
+            </div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>

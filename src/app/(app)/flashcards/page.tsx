@@ -13,7 +13,7 @@ import { CreateDeckModal } from "@/features/flashcards/components/CreateDeckModa
 import { FeatureHeader } from "@/components/shared/FeatureHeader";
 
 export default function FlashcardsPage() {
-  const { currentDeck } = useFlashcards();
+  const { currentDeck, setCurrentDeck } = useFlashcards();
   const { generateDeck, isGenerating } = useGenerateFlashcards();
   const [showCreateModal, setShowCreateModal] = useState(false);
 
@@ -28,7 +28,7 @@ export default function FlashcardsPage() {
 
       <main className="py-8 flex-1 container max-w-6xl mx-auto px-4">
         {currentDeck ? (
-          <CardViewer />
+          <CardViewer onBack={() => setCurrentDeck(null)} />
         ) : (
           <DeckList
             onGenerateDeck={generateDeck}
