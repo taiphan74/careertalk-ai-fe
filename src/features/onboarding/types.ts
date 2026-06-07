@@ -29,4 +29,5 @@ export interface ChatMessage {
   id: string;              // ID duy nhất của tin nhắn
   role: "user" | "assistant"; // Vai trò: người dùng hoặc bot
   content: string | BilingualContent; // String cho user, BilingualContent cho assistant
+  translationEn?: string; // Bản dịch EN của user message (từ Ollama, optional)
 }

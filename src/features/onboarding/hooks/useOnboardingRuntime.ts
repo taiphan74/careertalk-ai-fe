@@ -6,6 +6,7 @@ import {
   type AppendMessage,
 } from "@assistant-ui/react";
 import type { ChatMessage, BilingualContent } from "../types";
+import { useOnboardingStore } from "../store/useOnboardingStore";
 
 /**
  * Tham số đầu vào cho hook adapter runtime.
@@ -13,7 +14,7 @@ import type { ChatMessage, BilingualContent } from "../types";
 interface UseOnboardingRuntimeParams {
   messages: ChatMessage[];
   isRunning: boolean;
-  onSend: (content: string) => Promise<void>;
+  onSend: (content: string, translationEn?: string) => Promise<void>;
 }
 
 /**
@@ -71,7 +72,13 @@ export function useOnboardingRuntime({
       );
       const text = textParts.map((c) => c.text).join("");
       if (text) {
-        await onSend(text);
+        // Đọc translation đã lưu tạm từ store (do SendButton set trước khi send)
+        // Đọc translation hiện tại từ store rồi clear ngay
+        const { translationResult, clearTranslationResult } = useOnboardingStore.getState();
+        const translationEn = translationResult?.translation ?? undefined;
+        console.log("[DEBUG] onNew fired — translationResult:", translationResult, "translationEn:", translationEn);
+        clearTranslationResult();
+        await onSend(text, translationEn);
       }
     },
   });

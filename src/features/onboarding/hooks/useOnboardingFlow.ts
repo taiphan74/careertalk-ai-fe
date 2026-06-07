@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import type { ChatMessage, UserProfile, BilingualContent } from "../types";
 import { ONBOARDING_STEPS, getStepPrompt } from "../lib/onboarding-steps";
 import { getProfile, saveProfile } from "../lib/profile-storage";
+import { useOnboardingStore } from "../store/useOnboardingStore";
 
 /**
  * Hook quản lý luồng onboarding song ngữ (AI-driven).
@@ -138,7 +139,7 @@ export function useOnboardingFlow() {
    * FIX: Thêm user message vào state TRƯỚC khi gọi AI.
    * FIX: Dùng messagesRef thay vì messages closure để tránh stale.
    */
-  const handleNextStep = useCallback(async (content: string) => {
+  const handleNextStep = useCallback(async (content: string, translationEn?: string) => {
     const currentStep = ONBOARDING_STEPS[stepRef.current];
     if (!currentStep) return;
 
@@ -150,7 +151,12 @@ export function useOnboardingFlow() {
     stepRef.current = nextStep;
 
     // FIX: Add user message vào state ngay lập tức để UI hiển thị
-    const userMsg: ChatMessage = { id: `user-${Date.now()}`, role: "user", content };
+    const userMsg: ChatMessage = { id: `user-${Date.now()}`, role: "user", content, translationEn };
+    // Lưu translation vào store TRƯỚC setMessages để bubble đọc được ngay
+    if (translationEn) {
+      useOnboardingStore.getState().setTranslation(userMsg.id, translationEn);
+      console.log("[DEBUG] setTranslation:", userMsg.id, translationEn);
+    }
     setMessages((prev) => [...prev, userMsg]);
 
     setIsRunning(true);
@@ -222,7 +228,7 @@ export function useOnboardingFlow() {
    * Xử lý khi user gửi tin nhắn.
    * FIX: Truyền messagesRef.current vào handleCompletion thay vì dùng closure.
    */
-  const handleSend = useCallback(async (content: string) => {
+  const handleSend = useCallback(async (content: string, translationEn?: string) => {
     if (completedRef.current) return;
 
     const isLastStep = stepRef.current === ONBOARDING_STEPS.length - 1;
@@ -230,7 +236,11 @@ export function useOnboardingFlow() {
     if (isLastStep) {
       // Bước cuối → add user msg vào state, lưu profile, hoàn thành
       const currentStep = ONBOARDING_STEPS[stepRef.current];
-      const userMsg: ChatMessage = { id: `user-${Date.now()}`, role: "user", content };
+      const userMsg: ChatMessage = { id: `user-${Date.now()}`, role: "user", content, translationEn };
+      if (translationEn) {
+        useOnboardingStore.getState().setTranslation(userMsg.id, translationEn);
+        console.log("[DEBUG] setTranslation lastStep:", userMsg.id, translationEn);
+      }
       setMessages((prev) => [...prev, userMsg]);
 
       if (currentStep) {
@@ -239,7 +249,7 @@ export function useOnboardingFlow() {
       // Truyền snapshot fresh thay vì dùng stale closure
       await handleCompletion([...messagesRef.current, userMsg]);
     } else {
-      await handleNextStep(content);
+      await handleNextStep(content, translationEn);
     }
   }, [handleCompletion, handleNextStep]);
 

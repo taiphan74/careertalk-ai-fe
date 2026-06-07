@@ -2,6 +2,7 @@
 
 import { MessagePrimitive, useMessage } from "@assistant-ui/react";
 import type { BilingualContent } from "../types";
+import { useOnboardingStore } from "../store/useOnboardingStore";
 
 /**
  * CSS animation keyframes cho bubble fade-in + slide-up.
@@ -33,11 +34,18 @@ function injectStyles() {
 /**
  * Bong bóng tin nhắn người dùng.
  * Căn phải, gradient ocean blue, shadow tinh tế, animation slide-in.
+ * Hiển thị thêm bản dịch EN (từ Ollama) bên dưới nếu có.
  */
 export function UserMessageBubble() {
   injectStyles();
+  const message = useMessage();
+  // Đọc translationEn từ store map theo messageId
+  const translationEn = useOnboardingStore((s) => s.translationMap[message.id]);
+  console.log("[DEBUG] bubble id:", message.id, "translationEn:", translationEn, "map:", useOnboardingStore.getState().translationMap);
+
   return (
-    <div className="flex justify-end bubble-anim" style={{ animationDelay: "0.04s" }}>
+    <div className="flex flex-col items-end gap-1 bubble-anim" style={{ animationDelay: "0.04s" }}>
+      {/* Bubble chính */}
       <div
         className="rounded-2xl rounded-br-sm px-4 py-2.5 max-w-[80%] text-white text-sm leading-relaxed"
         style={{
@@ -47,6 +55,26 @@ export function UserMessageBubble() {
       >
         <MessagePrimitive.Content />
       </div>
+
+      {/* Translation pill — hiển thị nếu có bản dịch */}
+      {translationEn && (
+        <div
+          className="max-w-[80%] px-3 py-1.5 text-xs"
+          style={{
+            background: "rgba(239,246,255,0.90)",
+            backdropFilter: "blur(8px)",
+            border: "1px solid rgba(147,197,253,0.50)",
+            borderRadius: "10px",
+            color: "var(--primary-text)",
+            fontStyle: "italic",
+            lineHeight: 1.5,
+            boxShadow: "0 1px 4px rgba(37,99,235,0.08)",
+          }}
+        >
+          <span style={{ opacity: 0.6, fontSize: "10px", fontStyle: "normal", fontWeight: 600, marginRight: "4px" }}>EN</span>
+          {translationEn}
+        </div>
+      )}
     </div>
   );
 }
