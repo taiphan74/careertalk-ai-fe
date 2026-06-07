@@ -22,6 +22,7 @@ export function useFlashcards() {
   const toggleFlip = useFlashcardStore((s) => s.toggleFlip);
   const resetFlip = useFlashcardStore((s) => s.resetFlip);
   const markCardAsReviewed = useFlashcardStore((s) => s.markCardAsReviewed);
+  const seedMockDecks = useFlashcardStore((s) => s.seedMockDecks);
 
   /** Card hiện tại đang study (null nếu không có deck hoặc hết bài) */
   const currentCard = currentDeck?.cards[currentCardIndex] ?? null;
@@ -45,5 +46,6 @@ export function useFlashcards() {
     toggleFlip,
     resetFlip,
     markCardAsReviewed,
+    seedMockDecks,
   };
 }

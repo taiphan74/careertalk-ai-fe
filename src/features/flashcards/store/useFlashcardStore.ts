@@ -13,6 +13,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { FlashcardDeck } from "../types";
+import { MOCK_DECKS } from "../mocks/mock-data";
 
 interface FlashcardStore {
   decks: FlashcardDeck[];
@@ -28,6 +29,7 @@ interface FlashcardStore {
   toggleFlip: () => void;
   resetFlip: () => void;
   markCardAsReviewed: (deckId: string, cardId: string, remembered: boolean) => void;
+  seedMockDecks: () => void;
 }
 
 export const useFlashcardStore = create<FlashcardStore>()(
@@ -99,6 +101,9 @@ export const useFlashcardStore = create<FlashcardStore>()(
               : state.currentDeck;
           return { decks: newDecks, currentDeck: newCurrentDeck };
         });
+      },
+      seedMockDecks: () => {
+        set((state) => ({ decks: [...state.decks, ...MOCK_DECKS] }));
       },
     }),
     {

@@ -14,7 +14,7 @@ interface DeckListProps {
 }
 
 export function DeckList({ onGenerateDeck, onCreateDeck, isGenerating }: DeckListProps) {
-  const { decks, setCurrentDeck, deleteDeck } = useFlashcards();
+  const { decks, setCurrentDeck, deleteDeck, seedMockDecks } = useFlashcards();
 
   const handleStudy = (deck: FlashcardDeck) => {
     setCurrentDeck(deck);
@@ -46,6 +46,12 @@ export function DeckList({ onGenerateDeck, onCreateDeck, isGenerating }: DeckLis
               className="px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:border-gray-400 transition"
             >
               ✏️ Tạo thủ công
+            </button>
+            <button
+              onClick={seedMockDecks}
+              className="px-6 py-3 bg-white border-2 border-blue-300 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition"
+            >
+              🎲 Load Demo Data
             </button>
           </div>
         </div>
