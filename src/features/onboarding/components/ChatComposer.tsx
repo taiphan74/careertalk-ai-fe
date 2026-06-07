@@ -1,6 +1,7 @@
 "use client";
 
 import { ComposerPrimitive } from "@assistant-ui/react";
+import { TranslationHint } from "./TranslationHint";
 
 /**
  * Thanh nhập liệu — Creative style: border dày, radius playful, font rõ.
@@ -17,9 +18,11 @@ export function ChatComposer() {
         boxShadow: "0 -4px 20px rgba(96,165,250,0.08)",
       }}
     >
-      <ComposerPrimitive.Root className="flex gap-2 items-center">
-        {/* Input */}
-        <ComposerPrimitive.Input
+      <div className="flex flex-col w-full">
+        <ComposerPrimitive.Root className="flex gap-2 items-center">
+          {/* Input */}
+          <ComposerPrimitive.Input
+          data-composer-input
           placeholder="Nhập câu trả lời..."
           className="flex-1 text-sm font-medium"
           style={{
@@ -54,8 +57,12 @@ export function ChatComposer() {
             <path d="M22 2L11 13" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
             <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-        </ComposerPrimitive.Send>
-      </ComposerPrimitive.Root>
+          </ComposerPrimitive.Send>
+        </ComposerPrimitive.Root>
+
+        {/* Translation + grammar hint bên dưới input */}
+        <TranslationHint />
+      </div>
     </div>
   );
 }
