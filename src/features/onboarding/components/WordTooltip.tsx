@@ -9,22 +9,12 @@
 
 import React, { useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import type { WordEntry } from '../lib/word-dictionary';
+import { type WordEntry, POS_COLORS } from '../mocks/word-dictionary';
 
 interface WordTooltipProps {
   entry: WordEntry;
   children: React.ReactNode;
 }
-
-/** Badge màu nhạt dễ đọc trên nền trắng */
-const POS_COLORS: Record<string, string> = {
-  noun:        'bg-blue-100 text-blue-700 border border-blue-200',
-  verb:        'bg-green-100 text-green-700 border border-green-200',
-  adjective:   'bg-amber-100 text-amber-700 border border-amber-200',
-  adverb:      'bg-purple-100 text-purple-700 border border-purple-200',
-  pronoun:     'bg-pink-100 text-pink-700 border border-pink-200',
-  preposition: 'bg-cyan-100 text-cyan-700 border border-cyan-200',
-};
 
 export function WordTooltip({ entry, children }: WordTooltipProps) {
   const [open, setOpen] = useState(false);

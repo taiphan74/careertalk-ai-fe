@@ -16,6 +16,16 @@ export interface WordEntry {
   example: string;
 }
 
+/** Badge màu theo loại từ — dùng chung cho WordTooltip */
+export const POS_COLORS: Record<string, string> = {
+  noun:        'bg-blue-100 text-blue-700 border border-blue-200',
+  verb:        'bg-green-100 text-green-700 border border-green-200',
+  adjective:   'bg-amber-100 text-amber-700 border border-amber-200',
+  adverb:      'bg-purple-100 text-purple-700 border border-purple-200',
+  pronoun:     'bg-pink-100 text-pink-700 border border-pink-200',
+  preposition: 'bg-cyan-100 text-cyan-700 border border-cyan-200',
+};
+
 /**
  * Mock dictionary ~20 từ phổ thông xuất hiện trong onboarding flow.
  * Key: lowercase word không chứa ký tự đặc biệt.
@@ -148,7 +158,7 @@ const MOCK_DICTIONARY: Record<string, WordEntry> = {
  * Chuẩn hóa input: lowercase + loại bỏ ký tự không phải chữ cái.
  *
  * @param word - Từ cần tra cứu
- * @returns WordEntry từ mock dict hoặc fallback mặc định (demo phase)
+ * @returns WordEntry nếu tìm thấy, undefined nếu không có trong dict
  */
 export function lookupWord(word: string): WordEntry {
   const normalized = word.toLowerCase().replace(/[^a-z]/g, '');

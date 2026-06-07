@@ -9,7 +9,7 @@
  */
 
 import { useMemo } from 'react';
-import { lookupWord } from '../lib/word-dictionary';
+import { lookupWord } from '../mocks/word-dictionary';
 import { WordTooltip } from './WordTooltip';
 
 /** Props cho TokenizedText */

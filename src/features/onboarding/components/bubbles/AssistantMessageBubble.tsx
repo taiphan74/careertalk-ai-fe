@@ -12,10 +12,6 @@ import { injectStyles, parseBilingualContent } from "./bubble-styles";
 import { TokenizedText } from "../TokenizedText";
 
 /**
- * Render nội dung song ngữ EN (chính) + VI (phụ, mờ hơn).
- * Fallback sang plain text nếu không parse được JSON.
- */
-/**
  * Stable Text renderer cho assistant message.
  * Memoized để ngăn assistant-ui unmount/remount khi parent re-render,
  * giữ nguyên WordTooltip open state.
