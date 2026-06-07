@@ -6,7 +6,7 @@ import {
 } from "@assistant-ui/react";
 import { useOnboardingFlow } from "../hooks/useOnboardingFlow";
 import { useOnboardingRuntime } from "../hooks/useOnboardingRuntime";
-import { UserMessageBubble, AssistantMessageBubble, TypingIndicatorBubble } from "./ChatMessageBubble";
+import { UserMessageBubble, AssistantMessageBubble, TypingIndicatorBubble } from "./bubbles";
 import { ChatComposer } from "./ChatComposer";
 
 /**
