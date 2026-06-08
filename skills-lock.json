@@ -13,6 +13,12 @@
       "skillPath": "plugin/skills/commit-history/SKILL.md",
       "computedHash": "3568181217a848242391668203f75e253d465343513bd4b295fbfe2e160f0cda"
     },
+    "design-taste-frontend": {
+      "source": "Leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/taste-skill/SKILL.md",
+      "computedHash": "6d838b246d0e35d0b53f4f23f98ba7a1dd561937e64f7d0c7553b0928e376c3e"
+    },
     "forget": {
       "source": "rohitg00/agentmemory",
       "sourceType": "github",
@@ -25,6 +31,12 @@
       "skillPath": "plugin/skills/handoff/SKILL.md",
       "computedHash": "c71fec4b77d19b09b8b5a77787a0455dad7d6c2a04f15947642d4f280f4e6ad2"
     },
+    "imagegen-frontend-mobile": {
+      "source": "Leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/imagegen-frontend-mobile/SKILL.md",
+      "computedHash": "9ab7f4f6ce66a3cff02bbf5894e5bd5af50bf5d6ef0adffdc88e8fab772fe44f"
+    },
     "recall": {
       "source": "rohitg00/agentmemory",
       "sourceType": "github",
@@ -36,6 +48,12 @@
       "sourceType": "github",
       "skillPath": "plugin/skills/recap/SKILL.md",
       "computedHash": "dea05f1510feaa3667e008f67fb6ce09e92920829d1722dbae58a652424fdcbc"
+    },
+    "redesign-existing-projects": {
+      "source": "Leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/redesign-skill/SKILL.md",
+      "computedHash": "b405eee0e0e80fc243f731d9aa368bca307e356db7e6157d27101d369dac6726"
     },
     "remember": {
       "source": "rohitg00/agentmemory",
