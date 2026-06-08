@@ -8,6 +8,7 @@ import { useOnboardingFlow } from "../hooks/useOnboardingFlow";
 import { useOnboardingRuntime } from "../hooks/useOnboardingRuntime";
 import { UserMessageBubble, AssistantMessageBubble, TypingIndicatorBubble } from "./bubbles";
 import { ChatComposer } from "./ChatComposer";
+import { EmptyState } from "./EmptyState";
 import { GRADIENTS } from "../lib/styles";
 
 /**
@@ -39,6 +40,11 @@ export function OnboardingChat() {
         <ThreadPrimitive.Root className="flex flex-col h-full">
           {/* Vùng scroll chứa danh sách tin nhắn */}
           <ThreadPrimitive.Viewport className="flex-1 overflow-y-auto px-4 py-5 space-y-3">
+            {/* Empty state — hiển thị khi chưa có tin nhắn nào */}
+            <ThreadPrimitive.If empty>
+              <EmptyState onQuickPrompt={handleSend} />
+            </ThreadPrimitive.If>
+
             <ThreadPrimitive.Messages
               components={{
                 UserMessage: UserMessageBubble,

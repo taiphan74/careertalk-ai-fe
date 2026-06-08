@@ -11,18 +11,8 @@ export default function OnboardingPage() {
         title="CareerTalk AI Coach"
         subtitle="Học tiếng Anh theo cách của bạn"
         rightElement={
-          <div
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
-            style={{ background: "rgba(255,255,255,0.22)", color: "white", backdropFilter: "blur(8px)" }}
-          >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{
-                background: "#34D399",
-                boxShadow: "0 0 6px #34D399",
-                animation: "pulse-dot 2s ease-in-out infinite",
-              }}
-            />
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border">
+            <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
             Online
           </div>
         }

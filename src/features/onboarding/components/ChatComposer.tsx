@@ -9,16 +9,9 @@ import { TranslationHint } from "./TranslationHint";
 
 export function ChatComposer() {
   return (
-    <div className="flex-none px-4 py-4 relative bg-glass-composer shadow-composer border-t border-white/20 bg-clip-padding">
+    <div className="flex-none px-4 py-4 relative bg-background/70 backdrop-blur-2xl border-t border-border/50 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
       
-      {/* Decorative top glow bar */}
-      <div
-        aria-hidden="true"
-        className="absolute top-0 left-[10%] right-[10%] h-[1px] rounded-full"
-        style={{
-          background: "linear-gradient(90deg, transparent, var(--primary) 20%, var(--accent) 80%, transparent)",
-        }}
-      />
+
 
       <div className="flex flex-col w-full gap-2.5">
         <ComposerPrimitive.Root className="flex gap-3 items-center">
@@ -34,7 +27,7 @@ export function ChatComposer() {
 
           {/* Send button */}
           <ComposerPrimitive.Send
-            className="flex-none flex items-center justify-center w-11 h-11 rounded-2xl text-white bg-gradient-to-r from-primary to-accent shadow-md transition-all duration-150 hover:scale-105 active:scale-95 disabled:opacity-35 disabled:cursor-not-allowed"
+            className="flex-none flex items-center justify-center w-11 h-11 rounded-2xl text-primary-foreground bg-primary shadow-sm transition-all duration-200 hover:bg-primary/90 active:scale-95 disabled:opacity-35 disabled:cursor-not-allowed"
           >
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
               <path d="M22 2L11 13" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>

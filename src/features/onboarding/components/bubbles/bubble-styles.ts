@@ -18,15 +18,24 @@ import type { BilingualContent } from "../../types";
  */
 export const BUBBLE_STYLES = `
   @keyframes bubbleIn {
-    from { opacity: 0; transform: translateY(10px) scale(0.97); }
+    from { opacity: 0; transform: translateY(16px) scale(0.96); }
+    60%  { opacity: 1; transform: translateY(-2px) scale(1.01); }
     to   { opacity: 1; transform: translateY(0)    scale(1);    }
   }
   @keyframes typingBounce {
     0%, 80%, 100% { transform: translateY(0); }
-    40%           { transform: translateY(-6px); }
+    40%           { transform: translateY(-5px); }
   }
   .bubble-anim {
-    animation: bubbleIn 0.28s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+    animation: bubbleIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .bubble-anim {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
   }
 `;
 
