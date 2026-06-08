@@ -34,7 +34,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${bangers.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="noise-overlay min-h-full flex flex-col">
         {children}
         <Toaster position="top-center" richColors />
       </body>
