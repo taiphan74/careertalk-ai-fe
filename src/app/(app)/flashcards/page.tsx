@@ -18,9 +18,9 @@ export default function FlashcardsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <FeatureHeader
-        title="📚 Flashcards"
+        title="Flashcards"
         subtitle="Hệ thống thẻ từ vựng thông minh hỗ trợ phỏng vấn"
         backUrl="/"
         backLabel="Về trang chủ"

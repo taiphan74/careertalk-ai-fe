@@ -62,12 +62,12 @@ export function CardViewer({ onBack }: CardViewerProps) {
           variant="ghost" 
           onClick={onBack} 
           size="sm" 
-          className="font-medium text-text-secondary hover:text-foreground"
+          className="font-medium text-muted-foreground hover:text-foreground"
         >
           ← Thoát học
         </Button>
-        <div className="text-sm font-semibold text-text-tertiary bg-surface px-3 py-1 rounded-full border border-border/40">
-          Tiến độ: <span className="text-foreground">{currentCardIndex + 1}</span>/{currentDeck.cards.length}
+        <div className="text-xs font-medium text-muted-foreground bg-muted/40 px-3 py-1.5 rounded-md border border-border/30 tabular-nums">
+          {currentCardIndex + 1} / {currentDeck.cards.length}
         </div>
       </div>
 
@@ -79,25 +79,25 @@ export function CardViewer({ onBack }: CardViewerProps) {
       />
 
       {/* Nút bấm hành động */}
-      <div className="flex gap-4 justify-center pt-2">
+      <div className="flex gap-3 justify-center pt-4">
         <Button
           variant="outline"
-          className="flex-1 py-6 font-semibold border-accent/30 text-accent hover:bg-accent-light"
-          onClick={(e) => {
-            e.stopPropagation(); // Tránh kích hoạt sự kiện lật thẻ của cha
-            handleAction(false); // Chưa thuộc -> remembered = false
-          }}
-        >
-          ❌ Chưa thuộc (Học lại)
-        </Button>
-        <Button
-          className="flex-1 py-6 font-semibold bg-gradient-to-r from-success to-emerald-500 text-white shadow-md hover:shadow-lg"
+          className="flex-1 py-4 font-medium border-border text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
           onClick={(e) => {
             e.stopPropagation();
-            handleAction(true); // Đã thuộc -> remembered = true
+            handleAction(false);
           }}
         >
-          ✅ Đã thuộc làu
+          Học lại
+        </Button>
+        <Button
+          className="flex-1 py-4 font-medium bg-success text-white hover:bg-success/90 transition-colors shadow-sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleAction(true);
+          }}
+        >
+          Đã thuộc
         </Button>
       </div>
     </div>
