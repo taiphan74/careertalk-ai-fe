@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     }
 
     const result = await generateText({
-      model: ollama.chat("gemma4:e4b"),
+      model: ollama.chat("gemma4:e4b-it-qat"),
       messages: [{ role: "user", content: text }],
       system: SYSTEM_PROMPT,
     });

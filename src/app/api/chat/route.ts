@@ -42,7 +42,7 @@ export async function POST(req: Request) {
 
   // Dùng generateText thay vì streamText vì cần parse JSON response
   const result = await generateText({
-    model: ollama.chat("gemma4:e4b"),
+    model: ollama.chat("gemma4:e4b-it-qat"),
     messages,
     system: SYSTEM_PROMPT,
   });
