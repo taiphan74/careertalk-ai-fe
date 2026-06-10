@@ -512,3 +512,10 @@ button:active,
   padding-top: clamp(3rem, 8vw, 6rem);
   padding-bottom: clamp(4rem, 10vw, 8rem);
 }
+
+/* Dashboard link underline fix */
+[class*="dashboard"] a,
+[class*="dashboard"] a:hover,
+[class*="dashboard"] a:focus {
+  text-decoration: none !important;
+}
