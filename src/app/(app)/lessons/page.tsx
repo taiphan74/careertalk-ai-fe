@@ -1,14 +1,18 @@
-import { Search } from 'lucide-react';
-import { LessonsTabs } from '@/features/lessons/components/LessonsTabs';
+import { Search } from "lucide-react";
+import { LessonsTabs } from "@/features/lessons/components/LessonsTabs";
 
 export default function LessonsPage() {
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8">
-      {/* Header */}
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[var(--foreground)]">Bài Học</h1>
+    <div className="max-w-5xl mx-auto px-4 md:px-6 py-8 w-full">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold text-[var(--foreground)] tracking-tight">
+          Bài Học
+        </h2>
         <div className="relative hidden sm:block">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" />
+          <Search
+            size={16}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]"
+          />
           <input
             type="text"
             placeholder="Tìm kiếm bài học..."

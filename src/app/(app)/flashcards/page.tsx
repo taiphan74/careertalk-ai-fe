@@ -1,7 +1,3 @@
-/**
- * @file page.tsx
- * @description Thin route wrapper cho /flashcards sử dụng Shared FeatureHeader.
- */
 "use client";
 
 import { useState } from "react";
@@ -10,7 +6,7 @@ import { useGenerateFlashcards } from "@/features/flashcards/hooks/useGenerateFl
 import { DeckList } from "@/features/flashcards/components/DeckList";
 import { CardViewer } from "@/features/flashcards/components/CardViewer";
 import { CreateDeckModal } from "@/features/flashcards/components/CreateDeckModal";
-import { FeatureHeader } from "@/components/shared/FeatureHeader";
+import { Plus } from "@phosphor-icons/react";
 
 export default function FlashcardsPage() {
   const { currentDeck, setCurrentDeck } = useFlashcards();
@@ -18,15 +14,26 @@ export default function FlashcardsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <FeatureHeader
-        title="Flashcards"
-        subtitle="Hệ thống thẻ từ vựng thông minh hỗ trợ phỏng vấn"
-        backUrl="/"
-        backLabel="Về trang chủ"
-      />
+    <>
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-8 w-full">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-bold text-[var(--foreground)] tracking-tight">
+              Flashcards
+            </h2>
+            <p className="text-sm text-[var(--text-secondary)] mt-0.5">
+              Hệ thống thẻ từ vựng thông minh hỗ trợ phỏng vấn
+            </p>
+          </div>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--primary)] text-white text-sm font-medium hover:bg-[var(--primary-hover)] transition-colors"
+          >
+            <Plus size={16} weight="bold" />
+            Tạo bộ thẻ
+          </button>
+        </div>
 
-      <main className="py-8 flex-1 container max-w-6xl mx-auto px-4">
         {currentDeck ? (
           <CardViewer onBack={() => setCurrentDeck(null)} />
         ) : (
@@ -36,11 +43,11 @@ export default function FlashcardsPage() {
             isGenerating={isGenerating}
           />
         )}
-      </main>
+      </div>
 
       {showCreateModal && (
         <CreateDeckModal onClose={() => setShowCreateModal(false)} />
       )}
-    </div>
+    </>
   );
 }
