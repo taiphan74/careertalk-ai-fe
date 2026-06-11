@@ -4,6 +4,7 @@
  */
 "use client";
 
+import { motion } from "framer-motion";
 import { useFlashcards } from "../hooks/useFlashcards";
 import { ReviewStats } from "./ReviewStats";
 import { Button } from "@/components/ui/button";
@@ -105,13 +106,17 @@ export function DeckList({ onGenerateDeck, onCreateDeck, isGenerating }: DeckLis
 
       {/* Grid danh sách bộ thẻ */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {decks.map((deck) => (
-          <Card 
-            key={deck.id} 
-            className="flex flex-col justify-between bg-card border border-border hover:border-border-strong hover:bg-primary/90 transition duration-200 overflow-hidden"
+        {decks.map((deck, index) => (
+          <motion.div
+            key={deck.id}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.04, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ y: -2, boxShadow: "0 8px 24px rgba(37, 99, 235, 0.08)" }}
+            className="group cursor-pointer rounded-2xl border border-border bg-card text-card-foreground shadow transition-shadow overflow-hidden flex flex-col justify-between"
           >
             <CardHeader className="space-y-2">
-              <CardTitle className="text-lg font-bold text-foreground line-clamp-1">
+              <CardTitle className="text-lg font-bold text-foreground line-clamp-1 group-hover:text-primary">
                 {deck.name}
               </CardTitle>
               {deck.description && (
@@ -161,7 +166,7 @@ export function DeckList({ onGenerateDeck, onCreateDeck, isGenerating }: DeckLis
                 Xóa
               </Button>
             </CardFooter>
-          </Card>
+          </motion.div>
         ))}
       </div>
     </div>
