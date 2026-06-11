@@ -537,3 +537,14 @@ a[class*="text-white"]:hover {
 .strivo-spin {
   animation: strivo-spin 8s linear infinite;
 }
+
+/* Scroll Snap — Landing Page */
+.landing-scroll {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100dvh;
+}
+.landing-scroll .snap-section {
+  scroll-snap-align: start;
+  overflow: hidden;
+}

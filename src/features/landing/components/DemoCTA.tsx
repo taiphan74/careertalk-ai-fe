@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export function DemoCTA() {
   return (
-    <section id="demo" className="py-20 px-6 bg-[var(--surface)]">
+    <div className="py-20 px-6 bg-[var(--surface)] w-full">
       <div className="max-w-4xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
@@ -36,6 +36,6 @@ export function DemoCTA() {
           </div>
         </motion.div>
       </div>
-    </section>
+    </div>
   );
 }

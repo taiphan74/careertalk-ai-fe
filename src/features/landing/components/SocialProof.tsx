@@ -28,7 +28,7 @@ const TESTIMONIALS = [
 
 export function SocialProof() {
   return (
-    <section className="py-20 px-6 bg-white">
+    <div className="py-20 px-6 bg-white w-full">
       <div className="max-w-7xl mx-auto">
         <div className="mb-12 max-w-lg">
           <h2 className="text-3xl md:text-4xl font-black text-[var(--foreground)] tracking-tight leading-tight">
@@ -58,6 +58,6 @@ export function SocialProof() {
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }

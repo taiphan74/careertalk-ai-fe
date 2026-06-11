@@ -87,7 +87,7 @@ const VISUALS = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-20 px-6 bg-[var(--surface)]">
+    <div className="py-20 px-6 bg-[var(--surface)] w-full">
       <div className="max-w-7xl mx-auto">
         <div className="mb-14 max-w-lg">
           <h2 className="text-3xl md:text-4xl font-black text-[var(--foreground)] tracking-tight leading-tight">
@@ -126,6 +126,6 @@ export function HowItWorks() {
           })}
         </div>
       </div>
-    </section>
+    </div>
   );
 }
