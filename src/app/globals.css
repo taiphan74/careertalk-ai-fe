@@ -519,3 +519,12 @@ button:active,
 [class*="dashboard"] a:focus {
   text-decoration: none !important;
 }
+
+/* STRIVO Logo Spin Animation */
+@keyframes strivo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.strivo-spin {
+  animation: strivo-spin 8s linear infinite;
+}

@@ -38,7 +38,6 @@ export function FeatureHeader({
         {backUrl ? (
           <Link
             href={backUrl}
-            className="flex-none w-10 h-10 rounded-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
             className="flex-none w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-accent active:scale-95 transition-all text-foreground"
             title={backLabel}
           >
@@ -56,7 +55,6 @@ export function FeatureHeader({
           </Link>
         ) : (
           <div
-            className="flex-none w-10 h-10 rounded-2xl flex items-center justify-center"
             className="flex-none w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-accent active:scale-95 transition-all text-foreground"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
