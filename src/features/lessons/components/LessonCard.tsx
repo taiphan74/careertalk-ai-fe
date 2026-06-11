@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { Clock, ChevronRight } from 'lucide-react';
 import type { Lesson } from '../types';
 
@@ -10,8 +11,17 @@ interface LessonCardProps {
 }
 
 export function LessonCard({ lesson, index }: LessonCardProps) {
+  const router = useRouter();
   const isComplete = lesson.progress === 100;
   const isInProgress = lesson.progress > 0 && lesson.progress < 100;
+
+  /** Navigate đến trang bài học theo loại skill */
+  const handleClick = () => {
+    if (lesson.category === 'skills' && lesson.skill === 'Viết') {
+      router.push(`/writing/${lesson.id}`);
+    }
+    // TODO: các skill khác sẽ thêm sau
+  };
 
   return (
     <motion.div
@@ -19,6 +29,7 @@ export function LessonCard({ lesson, index }: LessonCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.04, ease: [0.16, 1, 0.3, 1] }}
       whileHover={{ y: -2, boxShadow: '0 8px 24px rgba(37, 99, 235, 0.08)' }}
+      onClick={handleClick}
       className="group cursor-pointer rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 transition-shadow"
     >
       <div className="mb-3 flex items-start justify-between">

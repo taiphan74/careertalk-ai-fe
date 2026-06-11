@@ -29,6 +29,8 @@ export const MOCK_LESSONS: Record<string, Lesson[]> = {
     { id: 's2', title: 'Nghe Chép Podcast Công Nghệ', category: 'skills', skill: 'Nghe', duration: '20 min', progress: 0 },
     { id: 's3', title: 'Sửa Lỗi Email Tiếng Anh', category: 'skills', skill: 'Viết', duration: '15 min', progress: 100 },
     { id: 's4', title: 'Đọc Tài Liệu API', category: 'skills', skill: 'Đọc', duration: '18 min', progress: 50 },
+    { id: 's5', title: 'Luận IELTS: Công Nghệ', category: 'skills', skill: 'Viết', duration: '30 min', progress: 0 },
+    { id: 's6', title: 'Thư Xin Việc Dev', category: 'skills', skill: 'Viết', duration: '20 min', progress: 0 },
   ],
 };
 
