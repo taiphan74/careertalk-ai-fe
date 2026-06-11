@@ -25,10 +25,10 @@ export function DemoCTA() {
               Thử ngay demo, không cần đăng ký. Cảm nhận sự khác biệt khi có AI coach bên cạnh.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 mt-2">
-              <Link href="/" className="no-underline inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-[var(--primary)] font-bold text-sm hover:bg-white/90 transition-all active:scale-[0.98] shadow-lg">
+              <Link href="/onboard" className="no-underline inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-[var(--primary)] font-bold text-sm hover:bg-white/90 transition-all active:scale-[0.98] shadow-lg">
                 Thử demo ngay <ArrowRight size={15} weight="bold" />
               </Link>
-              <Link href="/" className="no-underline inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/15 border border-white/25 text-white font-medium text-sm hover:bg-white/20 transition-all">
+              <Link href="/#features" className="no-underline inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/15 border border-white/25 text-white font-medium text-sm hover:bg-white/20 transition-all">
                 Xem tính năng đầy đủ
               </Link>
             </div>

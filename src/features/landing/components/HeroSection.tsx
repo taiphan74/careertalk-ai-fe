@@ -175,7 +175,7 @@ export function HeroSection() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <Link href="/" className="no-underline inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--primary)] text-white font-semibold text-sm hover:bg-[var(--primary-hover)] transition-all active:scale-[0.98] shadow-lg shadow-[var(--primary)]/25">
+            <Link href="/onboard" className="no-underline inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--primary)] text-white font-semibold text-sm hover:bg-[var(--primary-hover)] transition-all active:scale-[0.98] shadow-lg shadow-[var(--primary)]/25">
               Bắt đầu miễn phí <ArrowRight size={15} weight="bold" />
             </Link>
             <a href="#features" className="no-underline inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border)] text-slate-700 font-medium text-sm hover:border-[var(--primary)] hover:text-[var(--primary)] transition-all">

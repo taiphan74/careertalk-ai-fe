@@ -8,8 +8,8 @@ export function LandingFooter() {
         <StrivoLogo size={24} showWordmark showTagline={false} />
         <div className="flex items-center gap-6 text-xs text-slate-500">
           <Link href="/" className="no-underline hover:text-[var(--primary)] transition-colors">Ứng dụng</Link>
-          <Link href="/landing#features" className="no-underline hover:text-[var(--primary)] transition-colors">Tính năng</Link>
-          <Link href="/landing#how-it-works" className="no-underline hover:text-[var(--primary)] transition-colors">Cách dùng</Link>
+          <Link href="/#features" className="no-underline hover:text-[var(--primary)] transition-colors">Tính năng</Link>
+          <Link href="/#how-it-works" className="no-underline hover:text-[var(--primary)] transition-colors">Cách dùng</Link>
         </div>
         <p className="text-xs text-slate-400">2025 STRIVO. Được xây dựng cho người Việt.</p>
       </div>

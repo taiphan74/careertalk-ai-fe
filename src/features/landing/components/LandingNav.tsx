@@ -22,7 +22,7 @@ export function LandingNav() {
       }}
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/landing" className="no-underline">
+        <Link href="/" className="no-underline">
           <StrivoLogo size={28} showWordmark showTagline={false} />
         </Link>
 
@@ -33,14 +33,14 @@ export function LandingNav() {
         </div>
 
         <Link
-          href="/landing#demo"
+          href="/#demo"
           className="no-underline hidden md:block px-4 py-2 rounded-lg bg-[var(--primary)] text-white text-sm font-medium hover:bg-[var(--primary-hover)] transition-colors"
         >
           Dùng thử miễn phí
         </Link>
 
         <Link
-          href="/landing#demo"
+          href="/#demo"
           className="no-underline md:hidden px-3 py-1.5 rounded-lg bg-[var(--primary)] text-white text-xs font-medium"
         >
           Thử ngay
