@@ -8,8 +8,7 @@ export default function OnboardingPage() {
   return (
     <main className="h-screen w-full flex flex-col overflow-hidden">
       <FeatureHeader
-        title="CareerTalk AI Coach"
-        subtitle="Học tiếng Anh theo cách của bạn"
+        title=""
         rightElement={
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border">
             <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />

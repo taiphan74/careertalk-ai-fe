@@ -9,7 +9,6 @@ import { useOnboardingRuntime } from "../hooks/useOnboardingRuntime";
 import { UserMessageBubble, AssistantMessageBubble, TypingIndicatorBubble } from "./bubbles";
 import { ChatComposer } from "./ChatComposer";
 import { EmptyState } from "./EmptyState";
-import { GRADIENTS } from "../lib/styles";
 
 /**
  * Component chính của feature onboarding.
@@ -33,10 +32,7 @@ export function OnboardingChat() {
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
-      <div
-        className="flex flex-col h-full relative"
-        style={{ background: GRADIENTS.meshChat }}
-      >
+      <div className="flex flex-col h-full relative bg-white">
         <ThreadPrimitive.Root className="flex flex-col h-full">
           {/* Vùng scroll chứa danh sách tin nhắn */}
           <ThreadPrimitive.Viewport className="flex-1 overflow-y-auto px-4 py-5 space-y-3">

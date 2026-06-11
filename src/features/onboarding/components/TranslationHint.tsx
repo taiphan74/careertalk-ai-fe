@@ -65,7 +65,7 @@ export function TranslationHint() {
       setTranslationResult(res);
       console.log("[DEBUG] TranslationHint → store:", res);
       setIsLoading(false);
-    }, 700);
+    }, 2000);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };

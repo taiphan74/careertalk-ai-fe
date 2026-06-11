@@ -17,11 +17,11 @@ export function ChatComposer() {
         <ComposerPrimitive.Root className="flex gap-3 items-center">
 
           {/* Input — frosted inset glass */}
-          <div className="flex-1 relative rounded-[20px] bg-glass-input shadow-input-normal transition-all duration-200 focus-within:shadow-input-focus">
+          <div className="flex-1 relative rounded-[20px] bg-glass-input shadow-input-normal transition-all duration-200 focus-within:shadow-input-focus" style={{border:"none"}}>
             <ComposerPrimitive.Input
               data-composer-input
               placeholder="Nhập câu trả lời..."
-              className="w-full text-sm font-medium bg-transparent px-[18px] py-[11px] outline-none border-none rounded-[20px] text-foreground font-sans caret-primary"
+              className="w-full text-sm font-medium bg-transparent px-[18px] py-[11px] outline-none border-none rounded-[20px] text-foreground font-sans caret-primary resize-none"
             />
           </div>
 

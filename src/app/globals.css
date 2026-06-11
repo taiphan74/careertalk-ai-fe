@@ -538,6 +538,13 @@ a[class*="text-white"]:hover {
   animation: strivo-spin 8s linear infinite;
 }
 
+/* Composer textarea — remove focus ring */
+[data-composer-input] {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
 /* Scroll Snap — Landing Page */
 .landing-scroll {
   scroll-snap-type: y mandatory;
