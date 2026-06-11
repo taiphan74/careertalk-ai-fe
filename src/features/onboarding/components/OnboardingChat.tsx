@@ -9,6 +9,7 @@ import { useOnboardingRuntime } from "../hooks/useOnboardingRuntime";
 import { UserMessageBubble, AssistantMessageBubble, TypingIndicatorBubble } from "./bubbles";
 import { ChatComposer } from "./ChatComposer";
 import { EmptyState } from "./EmptyState";
+import { ErrorSummaryBubble } from "./ErrorSummaryBubble";
 
 /**
  * Component chính của feature onboarding.
@@ -22,7 +23,7 @@ import { EmptyState } from "./EmptyState";
  * Visual tokens: GRADIENTS.meshChat (radial gradient trên var(--background)).
  */
 export function OnboardingChat() {
-  const { messages, isRunning, handleSend } = useOnboardingFlow();
+  const { messages, isRunning, isCompleted, handleSend } = useOnboardingFlow();
 
   const runtime = useOnboardingRuntime({
     messages,
@@ -51,6 +52,9 @@ export function OnboardingChat() {
             <ThreadPrimitive.If running>
               <TypingIndicatorBubble />
             </ThreadPrimitive.If>
+
+            {/* Tổng hợp lỗi ngữ pháp khi onboarding hoàn thành */}
+            {isCompleted && <ErrorSummaryBubble />}
           </ThreadPrimitive.Viewport>
 
           {/* Input cố định ở đáy */}

@@ -9,6 +9,7 @@ import { useEffect, useState, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { translateCheck } from "../lib/translate-check";
 import { useOnboardingStore } from "../store/useOnboardingStore";
+import { useErrorTrackingStore } from "../store/useErrorTrackingStore";
 
 export function TranslationHint() {
   const [text, setText] = useState("");
@@ -63,7 +64,10 @@ export function TranslationHint() {
     timerRef.current = setTimeout(async () => {
       const res = await translateCheck(text);
       setTranslationResult(res);
-      console.log("[DEBUG] TranslationHint → store:", res);
+      // Push grammar errors into tracking store (deduped)
+      if (res?.errors && res.errors.length > 0) {
+        useErrorTrackingStore.getState().addErrors(res.errors, text);
+      }
       setIsLoading(false);
     }, 2000);
     return () => {

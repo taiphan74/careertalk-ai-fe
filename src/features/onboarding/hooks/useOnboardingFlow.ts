@@ -25,6 +25,7 @@ export function useOnboardingFlow() {
   // Khởi tạo trống, greeting sẽ được fetch từ AI khi mount
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isRunning, setIsRunning] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   // Dùng ref thay vì state vì các giá trị này không trigger re-render
   const profileRef = useRef<Partial<UserProfile>>({});
@@ -101,6 +102,7 @@ export function useOnboardingFlow() {
     const finalProfile = { ...profileRef.current, completedAt: new Date().toISOString() };
     saveProfile(finalProfile as UserProfile);
     completedRef.current = true;
+    setIsCompleted(true);
     toast.success("🎉 Thu thập thông tin thành công! Chào mừng bạn đến với CareerTalk AI.");
 
     setIsRunning(true);
@@ -204,6 +206,7 @@ export function useOnboardingFlow() {
     const existing = getProfile();
     if (existing?.completedAt) {
       completedRef.current = true;
+      setIsCompleted(true);
       return;
     }
 
@@ -253,5 +256,5 @@ export function useOnboardingFlow() {
     }
   }, [handleCompletion, handleNextStep]);
 
-  return { messages, isRunning, handleSend };
+  return { messages, isRunning, isCompleted, handleSend };
 }
