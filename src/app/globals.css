@@ -520,6 +520,15 @@ button:active,
   text-decoration: none !important;
 }
 
+/* Link inside button-styled anchor: preserve explicit text color */
+a[class*="text-white"] {
+  color: #ffffff;
+}
+a[class*="text-white"]:hover {
+  color: #ffffff;
+  text-decoration: none;
+}
+
 /* STRIVO Logo Spin Animation */
 @keyframes strivo-spin {
   from { transform: rotate(0deg); }
